@@ -180,25 +180,49 @@
             margin: 20px auto;
         }
         
-        .payment-info {
-            background-color: #e8f5e9;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            display: none;
+        .start-list {
+            margin-top: 30px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        .payment-info h3 {
+        .start-list h3 {
             margin-top: 0;
-            color: #2e7d32;
+            color: #2c3e50;
         }
         
-        .pix-key {
-            font-family: monospace;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            word-break: break-all;
+        .start-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .start-list th, .start-list td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .start-list th {
+            background-color: #f2f2f2;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .edit-btn {
+            background-color: #2196F3;
+        }
+        
+        .delete-btn {
+            background-color: #F44336;
         }
         
         @keyframes spin {
@@ -206,7 +230,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Responsividade */
         @media (max-width: 768px) {
             .race-info {
                 flex-direction: column;
@@ -214,6 +237,11 @@
             
             .race-date, .race-price {
                 margin-bottom: 10px;
+            }
+            
+            .start-list table {
+                display: block;
+                overflow-x: auto;
             }
         }
     </style>
@@ -225,7 +253,6 @@
     </header>
     
     <div id="races-container">
-        <!-- Provas serão carregadas dinamicamente -->
         <div class="loading-spinner" id="races-spinner"></div>
     </div>
     
@@ -253,46 +280,31 @@
             </div>
             
             <div class="form-group">
-                <label for="birth-date">Data de Nascimento:</label>
-                <input type="date" id="birth-date" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
+                <label for="birth-date">Data de Nascimento (DD-MM-AAAA):</label>
+                <input type="text" id="birth-date" placeholder="DD-MM-AAAA" required>
             </div>
             
             <div class="form-group">
                 <label for="phone">Telefone:</label>
-                <input type="tel" id="phone" required>
+                <input type="tel" id="phone" placeholder="(00) 00000-0000" required>
             </div>
             
             <div class="form-group">
                 <label for="category">Categoria:</label>
                 <select id="category" required>
                     <option value="">Selecione sua categoria</option>
-                    <option value="elite">Elite</option>
-                    <option value="sub23">Sub-23</option>
-                    <option value="master-a">Master A (30-39 anos)</option>
-                    <option value="master-b">Master B (40-49 anos)</option>
-                    <option value="master-c">Master C (50+ anos)</option>
-                    <option value="feminino">Feminino</option>
+                    <option value="Sub40">Sub40</option>
+                    <option value="Sub50">Sub50</option>
+                    <option value="Sub60">Sub60</option>
+                    <option value="60+">60+</option>
+                    <option value="Iniciantes">Iniciantes</option>
+                    <option value="Feminino Open">Feminino Open</option>
+                    <option value="MTB Open">MTB Open</option>
                 </select>
             </div>
             
             <div class="loading-spinner" id="register-spinner"></div>
-            <button id="confirm-register-btn" class="btn btn-success">Gerar Pagamento</button>
-            
-            <div id="payment-info" class="payment-info">
-                <h3>Pagamento via PIX</h3>
-                <p>Por favor, realize o pagamento para confirmar sua inscrição:</p>
-                <p><strong>Valor:</strong> R$<span id="payment-value">0</span>,00</p>
-                <p><strong>Chave PIX:</strong></p>
-                <div class="pix-key" id="pix-key">fa54ce23-7e5a-40c3-84bd-019b7e7d8f22</div>
-                <p><strong>Beneficiário:</strong> Ranking Ubatuba de Ciclismo</p>
-                <p>Após o pagamento, sua inscrição será confirmada automaticamente.</p>
-                <p>Em caso de dúvidas, entre em contato: (12) 99747-3756</p>
-            </div>
+            <button id="confirm-register-btn" class="btn btn-success">Confirmar Inscrição</button>
         </div>
     </div>
     
@@ -314,11 +326,11 @@
         </div>
     </div>
     
-    <!-- Modal de adição de prova -->
-    <div id="add-race-modal" class="modal">
+    <!-- Modal de adição/edição de prova -->
+    <div id="race-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Adicionar Nova Prova</h2>
+            <h2 id="race-modal-title">Adicionar Nova Prova</h2>
             
             <div class="form-group">
                 <label for="race-name">Nome da Prova:</label>
@@ -340,8 +352,40 @@
                 <textarea id="race-description" rows="3" style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px;"></textarea>
             </div>
             
-            <div class="loading-spinner" id="add-race-spinner"></div>
+            <div class="loading-spinner" id="race-spinner"></div>
             <button id="save-race-btn" class="btn btn-success">Salvar Prova</button>
+            <button id="delete-race-btn" class="btn btn-danger" style="display: none; margin-top: 10px;">Excluir Prova</button>
+        </div>
+    </div>
+    
+    <!-- Modal de edição de inscrito -->
+    <div id="rider-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Editar Inscrito</h2>
+            <p id="rider-race-name" style="font-weight: bold; margin-bottom: 20px;"></p>
+            
+            <div class="form-group">
+                <label for="edit-name">Nome Completo:</label>
+                <input type="text" id="edit-name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-category">Categoria:</label>
+                <select id="edit-category" required>
+                    <option value="Sub40">Sub40</option>
+                    <option value="Sub50">Sub50</option>
+                    <option value="Sub60">Sub60</option>
+                    <option value="60+">60+</option>
+                    <option value="Iniciantes">Iniciantes</option>
+                    <option value="Feminino Open">Feminino Open</option>
+                    <option value="MTB Open">MTB Open</option>
+                </select>
+            </div>
+            
+            <div class="loading-spinner" id="rider-spinner"></div>
+            <button id="save-rider-btn" class="btn btn-success">Salvar Alterações</button>
+            <button id="delete-rider-btn" class="btn btn-danger" style="margin-top: 10px;">Excluir Inscrição</button>
         </div>
     </div>
     
@@ -365,6 +409,8 @@
         // Variáveis globais
         let isAdmin = false;
         let currentRaceId = null;
+        let currentRiderId = null;
+        let editingRaceId = null;
         
         // Elementos do DOM
         const racesContainer = document.getElementById('races-container');
@@ -374,16 +420,14 @@
         const addRaceBtn = document.getElementById('add-race-btn');
         const registerModal = document.getElementById('register-modal');
         const loginModal = document.getElementById('login-modal');
-        const addRaceModal = document.getElementById('add-race-modal');
+        const raceModal = document.getElementById('race-modal');
+        const riderModal = document.getElementById('rider-modal');
         const closeButtons = document.getElementsByClassName('close');
         const confirmRegisterBtn = document.getElementById('confirm-register-btn');
         const fullNameInput = document.getElementById('full-name');
         const birthDateInput = document.getElementById('birth-date');
-        const emailInput = document.getElementById('email');
         const phoneInput = document.getElementById('phone');
         const categoryInput = document.getElementById('category');
-        const paymentInfo = document.getElementById('payment-info');
-        const paymentValue = document.getElementById('payment-value');
         const confirmLoginBtn = document.getElementById('confirm-login-btn');
         const adminEmailInput = document.getElementById('admin-email');
         const adminPasswordInput = document.getElementById('admin-password');
@@ -393,15 +437,24 @@
         const racePriceInput = document.getElementById('race-price');
         const raceDescriptionInput = document.getElementById('race-description');
         const saveRaceBtn = document.getElementById('save-race-btn');
+        const deleteRaceBtn = document.getElementById('delete-race-btn');
+        const raceModalTitle = document.getElementById('race-modal-title');
         const raceSelectedName = document.getElementById('race-selected-name');
+        const riderRaceName = document.getElementById('rider-race-name');
+        const editNameInput = document.getElementById('edit-name');
+        const editCategoryInput = document.getElementById('edit-category');
+        const saveRiderBtn = document.getElementById('save-rider-btn');
+        const deleteRiderBtn = document.getElementById('delete-rider-btn');
         const registerSpinner = document.getElementById('register-spinner');
-        const addRaceSpinner = document.getElementById('add-race-spinner');
+        const raceSpinner = document.getElementById('race-spinner');
+        const riderSpinner = document.getElementById('rider-spinner');
         const racesSpinner = document.getElementById('races-spinner');
         
         // Inicializar a aplicação
         function initApp() {
-            // Configurar máscara de telefone
+            // Configurar máscaras
             $('#phone').mask('(00) 00000-0000');
+            $('#birth-date').mask('00-00-0000');
             
             // Verificar estado de autenticação
             auth.onAuthStateChanged(user => {
@@ -425,9 +478,12 @@
             loginBtn.addEventListener('click', openLoginModal);
             confirmLoginBtn.addEventListener('click', loginAdmin);
             logoutBtn.addEventListener('click', logoutAdmin);
-            addRaceBtn.addEventListener('click', openAddRaceModal);
+            addRaceBtn.addEventListener('click', () => openRaceModal());
             saveRaceBtn.addEventListener('click', saveRace);
+            deleteRaceBtn.addEventListener('click', deleteRace);
             confirmRegisterBtn.addEventListener('click', confirmRegistration);
+            saveRiderBtn.addEventListener('click', saveRider);
+            deleteRiderBtn.addEventListener('click', deleteRider);
             
             // Fechar modais ao clicar no X
             for (let i = 0; i < closeButtons.length; i++) {
@@ -449,7 +505,7 @@
             racesSpinner.style.display = 'block';
             racesContainer.innerHTML = '';
             
-            database.ref('races').on('value', snapshot => {
+            database.ref('cyclingRaces').on('value', snapshot => {
                 racesSpinner.style.display = 'none';
                 
                 if (!snapshot.exists()) {
@@ -459,6 +515,8 @@
                 
                 const races = snapshot.val();
                 let hasOpenRaces = false;
+                
+                racesContainer.innerHTML = '';
                 
                 for (const raceId in races) {
                     const race = races[raceId];
@@ -473,6 +531,10 @@
                 if (!hasOpenRaces) {
                     racesContainer.innerHTML += '<p style="text-align: center;">Não há provas com inscrições abertas no momento.</p>';
                 }
+            }, error => {
+                console.error("Erro ao carregar provas:", error);
+                racesSpinner.style.display = 'none';
+                racesContainer.innerHTML = '<p>Ocorreu um erro ao carregar as provas. Por favor, recarregue a página.</p>';
             });
         }
         
@@ -502,6 +564,71 @@
                 raceElement.appendChild(registerBtn);
             }
             
+            // Start List (Lista de Inscritos)
+            const startListDiv = document.createElement('div');
+            startListDiv.className = 'start-list';
+            startListDiv.innerHTML = `<h3>Start List</h3>`;
+            
+            const startListTable = document.createElement('table');
+            startListTable.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        ${isAdmin ? '<th>Ações</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody id="start-list-${raceId}"></tbody>
+            `;
+            
+            // Carregar inscritos para esta prova
+            database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(raceId).on('value', snapshot => {
+                const tbody = startListDiv.querySelector(`#start-list-${raceId}`);
+                tbody.innerHTML = '';
+                
+                if (snapshot.exists()) {
+                    snapshot.forEach(childSnapshot => {
+                        const rider = childSnapshot.val();
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${rider.name}</td>
+                            <td>${rider.category}</td>
+                            ${isAdmin ? `
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${childSnapshot.key}">Editar</button>
+                                <button class="action-btn delete-btn" data-id="${childSnapshot.key}">Excluir</button>
+                            </td>
+                            ` : ''}
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    
+                    // Adicionar event listeners para os botões de ação
+                    if (isAdmin) {
+                        startListDiv.querySelectorAll('.edit-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                openEditRiderModal(btn.dataset.id);
+                            });
+                        });
+                        
+                        startListDiv.querySelectorAll('.delete-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                if (confirm('Deseja realmente excluir esta inscrição?')) {
+                                    deleteRider(btn.dataset.id);
+                                }
+                            });
+                        });
+                    }
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Nenhum inscrito ainda</td></tr>';
+                }
+            });
+            
+            startListDiv.appendChild(startListTable);
+            raceElement.appendChild(startListDiv);
+            
             if (isAdmin) {
                 const adminActions = document.createElement('div');
                 adminActions.style.marginTop = '15px';
@@ -512,7 +639,24 @@
                 toggleStatusBtn.style.marginRight = '10px';
                 toggleStatusBtn.addEventListener('click', () => toggleRaceStatus(raceId, race.status));
                 
+                const editRaceBtn = document.createElement('button');
+                editRaceBtn.className = 'btn btn-primary';
+                editRaceBtn.textContent = 'Editar Prova';
+                editRaceBtn.style.marginRight = '10px';
+                editRaceBtn.addEventListener('click', () => openRaceModal(raceId, race));
+                
+                const deleteRaceBtn = document.createElement('button');
+                deleteRaceBtn.className = 'btn btn-danger';
+                deleteRaceBtn.textContent = 'Excluir Prova';
+                deleteRaceBtn.addEventListener('click', () => {
+                    if (confirm('Deseja realmente excluir esta prova e todas as inscrições relacionadas?')) {
+                        deleteRace(raceId);
+                    }
+                });
+                
                 adminActions.appendChild(toggleStatusBtn);
+                adminActions.appendChild(editRaceBtn);
+                adminActions.appendChild(deleteRaceBtn);
                 raceElement.appendChild(adminActions);
             }
             
@@ -531,80 +675,92 @@
             raceSelectedName.textContent = race.name;
             fullNameInput.value = '';
             birthDateInput.value = '';
-            emailInput.value = '';
             phoneInput.value = '';
             categoryInput.value = '';
-            paymentInfo.style.display = 'none';
             registerModal.style.display = 'block';
         }
         
         // Confirmar inscrição
-        function confirmRegistration() {
+        async function confirmRegistration() {
             const name = fullNameInput.value.trim();
             const birthDate = birthDateInput.value;
-            const email = emailInput.value.trim();
             const phone = phoneInput.value.trim();
             const category = categoryInput.value;
             
-            if (!name || !birthDate || !email || !phone || !category) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
+            // Validação dos campos
+            if (!name) {
+                alert('Por favor, informe seu nome completo.');
+                return;
+            }
+            
+            if (!birthDate || !/^\d{2}-\d{2}-\d{4}$/.test(birthDate)) {
+                alert('Por favor, informe uma data de nascimento válida no formato DD-MM-AAAA.');
                 return;
             }
             
             const phoneDigits = phone.replace(/\D/g, '');
-            if (phoneDigits.length < 11) {
+            if (phoneDigits.length < 10) {
                 alert('Por favor, insira um telefone válido com DDD.');
                 return;
             }
             
-            // Mostrar spinner e desabilitar botão
+            if (!category) {
+                alert('Por favor, selecione sua categoria.');
+                return;
+            }
+            
             registerSpinner.style.display = 'block';
             confirmRegisterBtn.disabled = true;
             
-            // Obter dados da prova para pegar o valor
-            database.ref(`races/${currentRaceId}`).once('value')
-                .then(snapshot => {
-                    const race = snapshot.val();
-                    
-                    // Gerar ID único para a inscrição
-                    const registrationId = database.ref().child('registrations').push().key;
-                    
-                    // Dados da inscrição
-                    const registrationData = {
-                        raceId: currentRaceId,
-                        raceName: race.name,
-                        name,
-                        birthDate,
-                        email,
-                        phone,
-                        category,
-                        status: 'pending', // pending, paid, cancelled
-                        registrationDate: new Date().toISOString(),
-                        paymentMethod: 'pix'
-                    };
-                    
-                    // Salvar inscrição no Firebase
-                    return database.ref(`registrations/${registrationId}`).set(registrationData)
-                        .then(() => {
-                            // Mostrar informações de pagamento
-                            paymentValue.textContent = race.price.toFixed(2);
-                            paymentInfo.style.display = 'block';
-                            confirmRegisterBtn.textContent = 'Inscrição Gerada';
-                            confirmRegisterBtn.disabled = true;
-                            
-                            // Rolar para as informações de pagamento
-                            paymentInfo.scrollIntoView({ behavior: 'smooth' });
-                            
-                            // Opcional: Gerar QR Code PIX aqui se necessário
-                        });
-                })
-                .catch(error => {
-                    console.error('Erro na inscrição:', error);
-                    alert('Ocorreu um erro ao processar sua inscrição. Por favor, tente novamente.');
-                })
-                .finally(() => {
-                    registerSpinner.style.display = 'none';
-                });
+            try {
+                // Obter dados da prova
+                const raceSnapshot = await database.ref(`cyclingRaces/${currentRaceId}`).once('value');
+                const race = raceSnapshot.val();
+                
+                // Criar objeto de inscrição
+                const registrationData = {
+                    raceId: currentRaceId,
+                    raceName: race.name,
+                    raceDate: race.date,
+                    name,
+                    birthDate,
+                    phone,
+                    category,
+                    status: 'pending',
+                    registrationDate: new Date().toISOString()
+                };
+                
+                // Salvar no Firebase
+                const newRef = database.ref('cyclingRegistrations').push();
+                await newRef.set(registrationData);
+                
+                // Formatando a data para exibição
+                const formattedDate = formatDate(race.date);
+                
+                // Criar mensagem para WhatsApp
+                const whatsappMsg = `Olá, gostaria de confirmar a Inscrição no Ranking Ubatuba de Ciclismo!\n\n` +
+                                  `*Prova:* ${race.name}\n` +
+                                  `*Data:* ${formattedDate}\n` +
+                                  `*Nome:* ${name}\n` +
+                                  `*Data Nasc.:* ${birthDate}\n` +
+                                  `*Telefone:* ${phone}\n` +
+                                  `*Categoria:* ${category}\n` +
+                                  `*Valor:* R$${race.price.toFixed(2)}`;
+                
+                // Abrir WhatsApp
+                window.open(`https://wa.me/5512997473756?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+                
+                // Fechar modal e limpar campos
+                registerModal.style.display = 'none';
+                alert('Inscrição realizada com sucesso! Por favor, confirme o pagamento via WhatsApp.');
+                
+            } catch (error) {
+                console.error('Erro na inscrição:', error);
+                alert('Ocorreu um erro ao processar sua inscrição. Por favor, tente novamente.');
+            } finally {
+                registerSpinner.style.display = 'none';
+                confirmRegisterBtn.disabled = false;
+            }
         }
         
         // Abrir modal de login
@@ -633,7 +789,7 @@
                         adminPanel.style.display = 'block';
                         loginBtn.textContent = 'Admin Logado';
                         loginBtn.disabled = true;
-                        loadRaces(); // Recarregar provas para mostrar ações admin
+                        loadRaces();
                     } else {
                         throw new Error('Acesso não autorizado');
                     }
@@ -652,24 +808,40 @@
                     adminPanel.style.display = 'none';
                     loginBtn.textContent = 'Login Admin';
                     loginBtn.disabled = false;
-                    loadRaces(); // Recarregar provas para remover ações admin
+                    loadRaces();
                 })
                 .catch(error => {
                     console.error('Erro no logout:', error);
                 });
         }
         
-        // Abrir modal para adicionar nova prova
-        function openAddRaceModal() {
-            raceNameInput.value = '';
-            raceDateInput.value = '';
-            racePriceInput.value = '';
-            raceDescriptionInput.value = '';
-            addRaceModal.style.display = 'block';
+        // Abrir modal de prova (para adicionar ou editar)
+        function openRaceModal(raceId = null, raceData = null) {
+            editingRaceId = raceId;
+            
+            if (raceId && raceData) {
+                // Modo edição
+                raceModalTitle.textContent = 'Editar Prova';
+                raceNameInput.value = raceData.name;
+                raceDateInput.value = raceData.date;
+                racePriceInput.value = raceData.price;
+                raceDescriptionInput.value = raceData.description || '';
+                deleteRaceBtn.style.display = 'inline-block';
+            } else {
+                // Modo adição
+                raceModalTitle.textContent = 'Adicionar Nova Prova';
+                raceNameInput.value = '';
+                raceDateInput.value = '';
+                racePriceInput.value = '';
+                raceDescriptionInput.value = '';
+                deleteRaceBtn.style.display = 'none';
+            }
+            
+            raceModal.style.display = 'block';
         }
         
-        // Salvar nova prova
-        function saveRace() {
+        // Salvar prova (nova ou edição)
+        async function saveRace() {
             const name = raceNameInput.value.trim();
             const date = raceDateInput.value;
             const price = parseFloat(racePriceInput.value);
@@ -680,8 +852,7 @@
                 return;
             }
             
-            // Mostrar spinner e desabilitar botão
-            addRaceSpinner.style.display = 'block';
+            raceSpinner.style.display = 'block';
             saveRaceBtn.disabled = true;
             
             const raceData = {
@@ -689,24 +860,70 @@
                 date,
                 price,
                 description: description || null,
-                status: 'open', // open, closed
+                status: 'open',
                 createdAt: new Date().toISOString()
             };
             
-            // Salvar prova no Firebase
-            database.ref('races').push(raceData)
-                .then(() => {
-                    addRaceModal.style.display = 'none';
+            try {
+                if (editingRaceId) {
+                    // Atualizar prova existente
+                    await database.ref(`cyclingRaces/${editingRaceId}`).update(raceData);
+                    alert('Prova atualizada com sucesso!');
+                } else {
+                    // Criar nova prova
+                    await database.ref('cyclingRaces').push(raceData);
                     alert('Prova cadastrada com sucesso!');
-                })
-                .catch(error => {
-                    console.error('Erro ao salvar prova:', error);
-                    alert('Ocorreu um erro ao salvar a prova. Por favor, tente novamente.');
-                })
-                .finally(() => {
-                    addRaceSpinner.style.display = 'none';
-                    saveRaceBtn.disabled = false;
-                });
+                }
+                
+                raceModal.style.display = 'none';
+            } catch (error) {
+                console.error('Erro ao salvar prova:', error);
+                alert('Ocorreu um erro ao salvar a prova. Por favor, tente novamente.');
+            } finally {
+                raceSpinner.style.display = 'none';
+                saveRaceBtn.disabled = false;
+            }
+        }
+        
+        // Excluir prova
+        async function deleteRace() {
+            if (!editingRaceId) return;
+            
+            if (!confirm('Tem certeza que deseja excluir esta prova? Todas as inscrições relacionadas também serão removidas.')) {
+                return;
+            }
+            
+            raceSpinner.style.display = 'block';
+            deleteRaceBtn.disabled = true;
+            
+            try {
+                // Primeiro, excluir todas as inscrições desta prova
+                const registrationsSnapshot = await database.ref('cyclingRegistrations')
+                    .orderByChild('raceId')
+                    .equalTo(editingRaceId)
+                    .once('value');
+                
+                const updates = {};
+                if (registrationsSnapshot.exists()) {
+                    registrationsSnapshot.forEach(child => {
+                        updates[`cyclingRegistrations/${child.key}`] = null;
+                    });
+                }
+                
+                // Depois excluir a prova
+                updates[`cyclingRaces/${editingRaceId}`] = null;
+                
+                await database.ref().update(updates);
+                
+                raceModal.style.display = 'none';
+                alert('Prova e inscrições relacionadas excluídas com sucesso!');
+            } catch (error) {
+                console.error('Erro ao excluir prova:', error);
+                alert('Ocorreu um erro ao excluir a prova. Por favor, tente novamente.');
+            } finally {
+                raceSpinner.style.display = 'none';
+                deleteRaceBtn.disabled = false;
+            }
         }
         
         // Alternar status da prova (aberto/fechado)
@@ -717,7 +934,7 @@
                 : 'Deseja realmente encerrar as inscrições para esta prova?';
             
             if (confirm(confirmMsg)) {
-                database.ref(`races/${raceId}/status`).set(newStatus)
+                database.ref(`cyclingRaces/${raceId}/status`).set(newStatus)
                     .then(() => {
                         alert(`Inscrições ${newStatus === 'open' ? 'abertas' : 'encerradas'} com sucesso!`);
                     })
@@ -725,6 +942,84 @@
                         console.error('Erro ao atualizar status:', error);
                         alert('Ocorreu um erro ao atualizar o status da prova.');
                     });
+            }
+        }
+        
+        // Abrir modal para editar inscrito
+        async function openEditRiderModal(riderId) {
+            currentRiderId = riderId;
+            
+            try {
+                const snapshot = await database.ref(`cyclingRegistrations/${riderId}`).once('value');
+                const rider = snapshot.val();
+                
+                riderRaceName.textContent = rider.raceName;
+                editNameInput.value = rider.name;
+                editCategoryInput.value = rider.category;
+                
+                riderModal.style.display = 'block';
+            } catch (error) {
+                console.error('Erro ao carregar dados do inscrito:', error);
+                alert('Não foi possível carregar os dados do inscrito.');
+            }
+        }
+        
+        // Salvar edição de inscrito
+        async function saveRider() {
+            const name = editNameInput.value.trim();
+            const category = editCategoryInput.value;
+            
+            if (!name || !category) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            riderSpinner.style.display = 'block';
+            saveRiderBtn.disabled = true;
+            
+            try {
+                await database.ref(`cyclingRegistrations/${currentRiderId}`).update({
+                    name,
+                    category
+                });
+                
+                riderModal.style.display = 'none';
+                alert('Inscrição atualizada com sucesso!');
+            } catch (error) {
+                console.error('Erro ao atualizar inscrito:', error);
+                alert('Ocorreu um erro ao atualizar a inscrição. Por favor, tente novamente.');
+            } finally {
+                riderSpinner.style.display = 'none';
+                saveRiderBtn.disabled = false;
+            }
+        }
+        
+        // Excluir inscrito
+        async function deleteRider(riderId = null) {
+            const idToDelete = riderId || currentRiderId;
+            if (!idToDelete) return;
+            
+            if (!confirm('Tem certeza que deseja excluir esta inscrição?')) {
+                return;
+            }
+            
+            riderSpinner.style.display = 'block';
+            deleteRiderBtn.disabled = true;
+            
+            try {
+                await database.ref(`cyclingRegistrations/${idToDelete}`).remove();
+                
+                if (!riderId) {
+                    riderModal.style.display = 'none';
+                }
+                
+                alert('Inscrição excluída com sucesso!');
+            } catch (error) {
+                console.error('Erro ao excluir inscrito:', error);
+                alert('Ocorreu um erro ao excluir a inscrição. Por favor, tente novamente.');
+            } finally {
+                riderSpinner.style.display = 'none';
+                deleteRiderBtn.disabled = false;
             }
         }
         
