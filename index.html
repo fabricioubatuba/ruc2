@@ -566,65 +566,65 @@
             
             // Start List (Lista de Inscritos)
             const startListDiv = document.createElement('div');
-            startListDiv.className = 'start-list';
-            startListDiv.innerHTML = `<h3>Start List</h3>`;
-            
-            const startListTable = document.createElement('table');
-            startListTable.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Categoria</th>
-                        ${isAdmin ? '<th>Ações</th>' : ''}
-                    </tr>
-                </thead>
-                <tbody id="start-list-${raceId}"></tbody>
-            `;
+startListDiv.className = 'start-list';
+startListDiv.innerHTML = `<h3>Start List</h3>`;
+
+const startListTable = document.createElement('table');
+startListTable.innerHTML = `
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            ${isAdmin ? '<th>Ações</th>' : ''}
+        </tr>
+    </thead>
+    <tbody id="start-list-${raceId}"></tbody>
+`;
             
             // Carregar inscritos para esta prova
             database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(raceId).on('value', snapshot => {
-                const tbody = startListDiv.querySelector(`#start-list-${raceId}`);
-                tbody.innerHTML = '';
-                
-                if (snapshot.exists()) {
-                    snapshot.forEach(childSnapshot => {
-                        const rider = childSnapshot.val();
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${rider.name}</td>
-                            <td>${rider.category}</td>
-                            ${isAdmin ? `
-                            <td>
-                                <button class="action-btn edit-btn" data-id="${childSnapshot.key}">Editar</button>
-                                <button class="action-btn delete-btn" data-id="${childSnapshot.key}">Excluir</button>
-                            </td>
-                            ` : ''}
-                        `;
-                        tbody.appendChild(tr);
-                    });
+    const tbody = startListDiv.querySelector(`#start-list-${raceId}`);
+    tbody.innerHTML = '';
+    
+    if (snapshot.exists()) {
+        snapshot.forEach(childSnapshot => {
+            const rider = childSnapshot.val();
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${rider.name}</td>
+                <td>${rider.category}</td>
+                ${isAdmin ? `
+                <td>
+                    <button class="action-btn edit-btn" data-id="${childSnapshot.key}">Editar</button>
+                    <button class="action-btn delete-btn" data-id="${childSnapshot.key}">Excluir</button>
+                </td>
+                ` : ''}
+            `;
+            tbody.appendChild(tr);
+        });
                     
                     // Adicionar event listeners para os botões de ação
-                    if (isAdmin) {
-                        startListDiv.querySelectorAll('.edit-btn').forEach(btn => {
-                            btn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                openEditRiderModal(btn.dataset.id);
-                            });
-                        });
-                        
-                        startListDiv.querySelectorAll('.delete-btn').forEach(btn => {
-                            btn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                if (confirm('Deseja realmente excluir esta inscrição?')) {
-                                    deleteRider(btn.dataset.id);
-                                }
-                            });
-                        });
-                    }
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Nenhum inscrito ainda</td></tr>';
-                }
+               if (isAdmin) {
+            startListDiv.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openEditRiderModal(btn.dataset.id);
+                });
             });
+            
+            startListDiv.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm('Deseja realmente excluir esta inscrição?')) {
+                        deleteRider(btn.dataset.id);
+                    }
+                });
+            });
+        }
+    } else {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Nenhum inscrito ainda</td></tr>';
+    }
+});
             
             startListDiv.appendChild(startListTable);
             raceElement.appendChild(startListDiv);
