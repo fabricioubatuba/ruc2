@@ -58,29 +58,6 @@
         .race-date, .race-price {
             font-weight: bold;
         }
-
-        .status-cell {
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.8em;
-    padding: 3px 8px;
-    border-radius: 10px;
-}
-
-.status-cell.pending {
-    background-color: #FFEB3B;
-    color: #000;
-}
-
-.status-cell.waiting_payment {
-    background-color: #FF9800;
-    color: #FFF;
-}
-
-.status-cell.paid {
-    background-color: #4CAF50;
-    color: #FFF;
-}
         
         .race-status {
             display: inline-block;
@@ -382,15 +359,6 @@
     </div>
     
     <!-- Modal de edição de inscrito -->
-<div class="form-group">
-    <label for="edit-status">Status:</label>
-    <select id="edit-status" required>
-        <option value="pending">Contato Pendente</option>
-        <option value="waiting_payment">Aguardando Pagamento</option>
-        <option value="paid">Pagamento Concluído</option>
-    </select>
-</div>
-    
     <div id="rider-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -614,52 +582,26 @@ startListTable.innerHTML = `
 `;
             
             // Carregar inscritos para esta prova
-            database.ref('cyclingRegistrations')
-    .orderByChild('raceId')
-    .equalTo(raceId)
-    .once('value')
-    .then(snapshot => {
-        const riders = [];
-        snapshot.forEach(child => {
-            riders.push({
-                id: child.key,
-                ...child.val()
-            });
-        });
-
-        // Ordena por status: pending -> waiting_payment -> paid
-        riders.sort((a, b) => {
-            const statusOrder = {pending: 1, waiting_payment: 2, paid: 3};
-            return statusOrder[a.paymentStatus] - statusOrder[b.paymentStatus];
-        });
-
-        // Renderiza na tabela
-        const tbody = startListDiv.querySelector(`#start-list-${raceId}`);
-        tbody.innerHTML = '';
-        
-        riders.forEach((rider, index) => {
-            const statusText = {
-                pending: 'Contato Pendente',
-                waiting_payment: 'Aguardando Pagamento',
-                paid: 'Pagamento Concluído'
-            };
-            
+            database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(raceId).on('value', snapshot => {
+    const tbody = startListDiv.querySelector(`#start-list-${raceId}`);
+    tbody.innerHTML = '';
+    
+    if (snapshot.exists()) {
+        snapshot.forEach(childSnapshot => {
+            const rider = childSnapshot.val();
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${String(index + 1).padStart(3, '0')}</td>
                 <td>${rider.name}</td>
                 <td>${rider.category}</td>
-                <td class="status-cell ${rider.paymentStatus}">${statusText[rider.paymentStatus]}</td>
                 ${isAdmin ? `
                 <td>
-                    <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
-                    <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
+                    <button class="action-btn edit-btn" data-id="${childSnapshot.key}">Editar</button>
+                    <button class="action-btn delete-btn" data-id="${childSnapshot.key}">Excluir</button>
                 </td>
                 ` : ''}
             `;
             tbody.appendChild(tr);
         });
-    });
                     
                     // Adicionar event listeners para os botões de ação
                if (isAdmin) {
@@ -786,7 +728,6 @@ startListTable.innerHTML = `
                     category,
                     status: 'pending',
                     registrationDate: new Date().toISOString()
-                    paymentStatus: 'pending', // Status inicial
                 };
                 
                 // Salvar no Firebase
@@ -1004,57 +945,54 @@ startListTable.innerHTML = `
             }
         }
         
+        // Abrir modal para editar inscrito
         async function openEditRiderModal(riderId) {
-    currentRiderId = riderId;
-    
-    try {
-        const snapshot = await database.ref(`cyclingRegistrations/${riderId}`).once('value');
-        const rider = snapshot.val();
+            currentRiderId = riderId;
+            
+            try {
+                const snapshot = await database.ref(`cyclingRegistrations/${riderId}`).once('value');
+                const rider = snapshot.val();
+                
+                riderRaceName.textContent = rider.raceName;
+                editNameInput.value = rider.name;
+                editCategoryInput.value = rider.category;
+                
+                riderModal.style.display = 'block';
+            } catch (error) {
+                console.error('Erro ao carregar dados do inscrito:', error);
+                alert('Não foi possível carregar os dados do inscrito.');
+            }
+        }
         
-        riderRaceName.textContent = rider.raceName;
-        editNameInput.value = rider.name;
-        editCategoryInput.value = rider.category;
-        
-        // Novo código para o status:
-        const statusSelect = document.getElementById('edit-status');
-        statusSelect.value = rider.paymentStatus || 'pending'; // Define o valor atual ou 'pending' como padrão
-        
-        riderModal.style.display = 'block';
-    } catch (error) {
-        console.error('Erro ao carregar dados do inscrito:', error);
-        alert('Não foi possível carregar os dados do inscrito.');
-    }
-}
+        // Salvar edição de inscrito
         async function saveRider() {
-    const name = editNameInput.value.trim();
-    const category = editCategoryInput.value;
-    const status = document.getElementById('edit-status').value; // Novo campo
-    
-    if (!name || !category || !status) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
-        return;
-    }
-    
-    riderSpinner.style.display = 'block';
-    saveRiderBtn.disabled = true;
-    
-    try {
-        await database.ref(`cyclingRegistrations/${currentRiderId}`).update({
-            name,
-            category,
-            paymentStatus: status // Novo campo a ser salvo
-        });
-        
-        riderModal.style.display = 'none';
-        alert('Inscrição atualizada com sucesso!');
-    } catch (error) {
-        console.error('Erro ao atualizar inscrito:', error);
-        alert('Ocorreu um erro ao atualizar a inscrição. Por favor, tente novamente.');
-    } finally {
-        riderSpinner.style.display = 'none';
-        saveRiderBtn.disabled = false;
-    }
-}
+            const name = editNameInput.value.trim();
+            const category = editCategoryInput.value;
+            
+            if (!name || !category) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            riderSpinner.style.display = 'block';
+            saveRiderBtn.disabled = true;
+            
+            try {
+                await database.ref(`cyclingRegistrations/${currentRiderId}`).update({
+                    name,
+                    category
+                });
+                
+                riderModal.style.display = 'none';
+                alert('Inscrição atualizada com sucesso!');
+            } catch (error) {
+                console.error('Erro ao atualizar inscrito:', error);
+                alert('Ocorreu um erro ao atualizar a inscrição. Por favor, tente novamente.');
+            } finally {
+                riderSpinner.style.display = 'none';
+                saveRiderBtn.disabled = false;
+            }
+        }
         
         // Excluir inscrito
         async function deleteRider(riderId = null) {
