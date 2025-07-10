@@ -648,18 +648,17 @@
             }
             
             const startListTable = document.createElement('table');
-            startListTable.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nome</th>
-                        <th>Categoria</th>
-                        <th>Status</th>
-                        ${isAdmin ? '<th>Ações</th>' : ''}
-                    </tr>
-                </thead>
-                <tbody id="start-list-${raceId}"></tbody>
-            `;
+startListTable.innerHTML = `
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Categoria</th>
+            ${isAdmin ? '<th>Status</th><th>Ações</th>' : ''}
+        </tr>
+    </thead>
+    <tbody id="start-list-${raceId}"></tbody>
+`;
             
             // Carregar inscritos para esta prova
             loadRidersForRace(raceId, startListDiv);
@@ -730,18 +729,18 @@
                         const statusText = getStatusText(rider.status);
                         
                         const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${String(counter).padStart(3, '0')}</td>
-                            <td>${rider.name}</td>
-                            <td>${rider.category}</td>
-                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                            ${isAdmin ? `
-                            <td>
-                                <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
-                                <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
-                            </td>
-                            ` : ''}
-                        `;
+tr.innerHTML = `
+    <td>${String(counter).padStart(3, '0')}</td>
+    <td>${rider.name}</td>
+    <td>${rider.category}</td>
+    ${isAdmin ? `
+    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+    <td>
+        <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
+        <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
+    </td>
+    ` : ''}
+`;
                         tbody.appendChild(tr);
                         counter++;
                     });
