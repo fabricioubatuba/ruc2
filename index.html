@@ -225,6 +225,48 @@
             background-color: #F44336;
         }
         
+        /* Novos estilos para os status */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-pending {
+            background-color: #FF9800;
+        }
+        
+        .status-waiting {
+            background-color: #2196F3;
+        }
+        
+        .status-completed {
+            background-color: #4CAF50;
+        }
+        
+        .status-filter {
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+        
+        .race-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .image-upload {
+            margin-bottom: 15px;
+        }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -307,7 +349,6 @@
             <button id="confirm-register-btn" class="btn btn-success">Confirmar Inscrição</button>
         </div>
     </div>
-    
     <!-- Modal de login -->
     <div id="login-modal" class="modal">
         <div class="modal-content">
@@ -352,6 +393,11 @@
                 <textarea id="race-description" rows="3" style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px;"></textarea>
             </div>
             
+            <div class="form-group image-upload">
+                <label for="race-image-url">URL da Imagem (opcional):</label>
+                <input type="text" id="race-image-url" placeholder="Cole a URL da imagem aqui">
+            </div>
+            
             <div class="loading-spinner" id="race-spinner"></div>
             <button id="save-race-btn" class="btn btn-success">Salvar Prova</button>
             <button id="delete-race-btn" class="btn btn-danger" style="display: none; margin-top: 10px;">Excluir Prova</button>
@@ -380,6 +426,15 @@
                     <option value="Iniciantes">Iniciantes</option>
                     <option value="Feminino Open">Feminino Open</option>
                     <option value="MTB Open">MTB Open</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-status">Status:</label>
+                <select id="edit-status" required>
+                    <option value="pending">Contato Pendente</option>
+                    <option value="waiting">Aguardando Pagamento</option>
+                    <option value="completed">Pagamento Concluído</option>
                 </select>
             </div>
             
@@ -436,6 +491,7 @@
         const raceDateInput = document.getElementById('race-date');
         const racePriceInput = document.getElementById('race-price');
         const raceDescriptionInput = document.getElementById('race-description');
+        const raceImageUrlInput = document.getElementById('race-image-url');
         const saveRaceBtn = document.getElementById('save-race-btn');
         const deleteRaceBtn = document.getElementById('delete-race-btn');
         const raceModalTitle = document.getElementById('race-modal-title');
@@ -443,6 +499,7 @@
         const riderRaceName = document.getElementById('rider-race-name');
         const editNameInput = document.getElementById('edit-name');
         const editCategoryInput = document.getElementById('edit-category');
+        const editStatusInput = document.getElementById('edit-status');
         const saveRiderBtn = document.getElementById('save-rider-btn');
         const deleteRiderBtn = document.getElementById('delete-rider-btn');
         const registerSpinner = document.getElementById('register-spinner');
@@ -556,6 +613,13 @@
                 ${race.description ? `<p>${race.description}</p>` : ''}
             `;
             
+            // Adicionar imagem da prova se existir
+            if (race.imageUrl) {
+                raceElement.innerHTML = `
+                    <img src="${race.imageUrl}" alt="${race.name}" class="race-image">
+                ` + raceElement.innerHTML;
+            }
+            
             if (race.status === 'open') {
                 const registerBtn = document.createElement('button');
                 registerBtn.className = 'btn btn-primary';
@@ -566,65 +630,39 @@
             
             // Start List (Lista de Inscritos)
             const startListDiv = document.createElement('div');
-startListDiv.className = 'start-list';
-startListDiv.innerHTML = `<h3>Start List</h3>`;
-
-const startListTable = document.createElement('table');
-startListTable.innerHTML = `
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Categoria</th>
-            ${isAdmin ? '<th>Ações</th>' : ''}
-        </tr>
-    </thead>
-    <tbody id="start-list-${raceId}"></tbody>
-`;
+            startListDiv.className = 'start-list';
+            startListDiv.innerHTML = `<h3>Start List</h3>`;
+            
+            // Filtro de status (apenas para admin)
+            if (isAdmin) {
+                const filterSelect = document.createElement('select');
+                filterSelect.className = 'status-filter';
+                filterSelect.innerHTML = `
+                    <option value="all">Todos os Status</option>
+                    <option value="pending">Contato Pendente</option>
+                    <option value="waiting">Aguardando Pagamento</option>
+                    <option value="completed">Pagamento Concluído</option>
+                `;
+                filterSelect.addEventListener('change', (e) => filterStartList(raceId, e.target.value));
+                startListDiv.appendChild(filterSelect);
+            }
+            
+            const startListTable = document.createElement('table');
+            startListTable.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Status</th>
+                        ${isAdmin ? '<th>Ações</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody id="start-list-${raceId}"></tbody>
+            `;
             
             // Carregar inscritos para esta prova
-            database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(raceId).on('value', snapshot => {
-    const tbody = startListDiv.querySelector(`#start-list-${raceId}`);
-    tbody.innerHTML = '';
-    
-    if (snapshot.exists()) {
-        snapshot.forEach(childSnapshot => {
-            const rider = childSnapshot.val();
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${rider.name}</td>
-                <td>${rider.category}</td>
-                ${isAdmin ? `
-                <td>
-                    <button class="action-btn edit-btn" data-id="${childSnapshot.key}">Editar</button>
-                    <button class="action-btn delete-btn" data-id="${childSnapshot.key}">Excluir</button>
-                </td>
-                ` : ''}
-            `;
-            tbody.appendChild(tr);
-        });
-                    
-                    // Adicionar event listeners para os botões de ação
-               if (isAdmin) {
-            startListDiv.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openEditRiderModal(btn.dataset.id);
-                });
-            });
-            
-            startListDiv.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (confirm('Deseja realmente excluir esta inscrição?')) {
-                        deleteRider(btn.dataset.id);
-                    }
-                });
-            });
-        }
-    } else {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Nenhum inscrito ainda</td></tr>';
-    }
-});
+            loadRidersForRace(raceId, startListDiv);
             
             startListDiv.appendChild(startListTable);
             raceElement.appendChild(startListDiv);
@@ -661,6 +699,113 @@ startListTable.innerHTML = `
             }
             
             return raceElement;
+        }
+        
+        // Carregar inscritos para uma prova específica
+        function loadRidersForRace(raceId, container) {
+            database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(raceId).on('value', snapshot => {
+                const tbody = container.querySelector(`#start-list-${raceId}`);
+                tbody.innerHTML = '';
+                
+                if (snapshot.exists()) {
+                    let riders = [];
+                    let counter = 1;
+                    
+                    // Coletar todos os riders e converter para array
+                    snapshot.forEach(childSnapshot => {
+                        const rider = childSnapshot.val();
+                        rider.id = childSnapshot.key;
+                        riders.push(rider);
+                    });
+                    
+                    // Ordenar por status: pending -> waiting -> completed
+                    riders.sort((a, b) => {
+                        const statusOrder = { 'pending': 1, 'waiting': 2, 'completed': 3 };
+                        return statusOrder[a.status] - statusOrder[b.status];
+                    });
+                    
+                    // Adicionar riders à tabela
+                    riders.forEach(rider => {
+                        const statusClass = getStatusClass(rider.status);
+                        const statusText = getStatusText(rider.status);
+                        
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${String(counter).padStart(3, '0')}</td>
+                            <td>${rider.name}</td>
+                            <td>${rider.category}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            ${isAdmin ? `
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
+                                <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
+                            </td>
+                            ` : ''}
+                        `;
+                        tbody.appendChild(tr);
+                        counter++;
+                    });
+                    
+                    // Adicionar event listeners para os botões de ação
+                    if (isAdmin) {
+                        container.querySelectorAll('.edit-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                openEditRiderModal(btn.dataset.id);
+                            });
+                        });
+                        
+                        container.querySelectorAll('.delete-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                if (confirm('Deseja realmente excluir esta inscrição?')) {
+                                    deleteRider(btn.dataset.id);
+                                }
+                            });
+                        });
+                    }
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum inscrito ainda</td></tr>';
+                }
+            });
+        }
+        // Filtrar start list por status
+        function filterStartList(raceId, status) {
+            const tbody = document.querySelector(`#start-list-${raceId}`);
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                if (status === 'all') {
+                    row.style.display = '';
+                } else {
+                    const statusBadge = row.querySelector('.status-badge');
+                    if (statusBadge) {
+                        const riderStatus = statusBadge.classList.contains('status-pending') ? 'pending' : 
+                                          statusBadge.classList.contains('status-waiting') ? 'waiting' : 'completed';
+                        row.style.display = riderStatus === status ? '' : 'none';
+                    }
+                }
+            });
+        }
+        
+        // Obter classe CSS para o status
+        function getStatusClass(status) {
+            switch(status) {
+                case 'pending': return 'status-pending';
+                case 'waiting': return 'status-waiting';
+                case 'completed': return 'status-completed';
+                default: return 'status-pending';
+            }
+        }
+        
+        // Obter texto para o status
+        function getStatusText(status) {
+            switch(status) {
+                case 'pending': return 'Contato Pendente';
+                case 'waiting': return 'Aguardando Pagamento';
+                case 'completed': return 'Pagamento Concluído';
+                default: return 'Contato Pendente';
+            }
         }
         
         // Formatar data para exibição
@@ -726,7 +871,7 @@ startListTable.innerHTML = `
                     birthDate,
                     phone,
                     category,
-                    status: 'pending',
+                    status: 'pending', // Status padrão: Contato Pendente
                     registrationDate: new Date().toISOString()
                 };
                 
@@ -826,6 +971,7 @@ startListTable.innerHTML = `
                 raceDateInput.value = raceData.date;
                 racePriceInput.value = raceData.price;
                 raceDescriptionInput.value = raceData.description || '';
+                raceImageUrlInput.value = raceData.imageUrl || '';
                 deleteRaceBtn.style.display = 'inline-block';
             } else {
                 // Modo adição
@@ -834,6 +980,7 @@ startListTable.innerHTML = `
                 raceDateInput.value = '';
                 racePriceInput.value = '';
                 raceDescriptionInput.value = '';
+                raceImageUrlInput.value = '';
                 deleteRaceBtn.style.display = 'none';
             }
             
@@ -846,6 +993,7 @@ startListTable.innerHTML = `
             const date = raceDateInput.value;
             const price = parseFloat(racePriceInput.value);
             const description = raceDescriptionInput.value.trim();
+            const imageUrl = raceImageUrlInput.value.trim();
             
             if (!name || !date || isNaN(price) || price <= 0) {
                 alert('Por favor, preencha todos os campos obrigatórios com valores válidos.');
@@ -860,6 +1008,7 @@ startListTable.innerHTML = `
                 date,
                 price,
                 description: description || null,
+                imageUrl: imageUrl || null,
                 status: 'open',
                 createdAt: new Date().toISOString()
             };
@@ -956,6 +1105,7 @@ startListTable.innerHTML = `
                 riderRaceName.textContent = rider.raceName;
                 editNameInput.value = rider.name;
                 editCategoryInput.value = rider.category;
+                editStatusInput.value = rider.status || 'pending';
                 
                 riderModal.style.display = 'block';
             } catch (error) {
@@ -968,8 +1118,9 @@ startListTable.innerHTML = `
         async function saveRider() {
             const name = editNameInput.value.trim();
             const category = editCategoryInput.value;
+            const status = editStatusInput.value;
             
-            if (!name || !category) {
+            if (!name || !category || !status) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
@@ -980,7 +1131,8 @@ startListTable.innerHTML = `
             try {
                 await database.ref(`cyclingRegistrations/${currentRiderId}`).update({
                     name,
-                    category
+                    category,
+                    status
                 });
                 
                 riderModal.style.display = 'none';
