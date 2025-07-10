@@ -458,7 +458,7 @@
             
             // Verificar estado de autenticação
             auth.onAuthStateChanged(user => {
-                if (user && user.email === "bioranss@gmail.com") {
+                if (user && user.email === "ruc@ruc.com") {
                     isAdmin = true;
                     adminPanel.style.display = 'block';
                     loginBtn.textContent = 'Admin Logado';
@@ -748,7 +748,7 @@
                                   `*Valor:* R$${race.price.toFixed(2)}`;
                 
                 // Abrir WhatsApp
-                window.open(`https://wa.me/5512997473756?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+                window.open(`https://wa.me/5512997689586?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
                 
                 // Fechar modal e limpar campos
                 registerModal.style.display = 'none';
@@ -783,7 +783,7 @@
             
             auth.signInWithEmailAndPassword(email, password)
                 .then(userCredential => {
-                    if (userCredential.user.email === "bioranss@gmail.com") {
+                    if (userCredential.user.email === "ruc@ruc.com") {
                         loginModal.style.display = 'none';
                         isAdmin = true;
                         adminPanel.style.display = 'block';
