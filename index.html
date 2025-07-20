@@ -267,6 +267,34 @@
             margin-bottom: 15px;
         }
         
+        .options-container {
+            margin-bottom: 15px;
+        }
+        
+        .options-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .options-checkbox {
+            margin-right: 10px;
+        }
+        
+        .options-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -284,6 +312,11 @@
             .start-list table {
                 display: block;
                 overflow-x: auto;
+            }
+            
+            .options-list {
+                flex-direction: column;
+                gap: 5px;
             }
         }
     </style>
@@ -331,7 +364,7 @@
                 <input type="tel" id="phone" placeholder="(00) 00000-0000" required>
             </div>
             
-            <div class="form-group">
+            <div id="category-section" class="form-group" style="display: none;">
                 <label for="category">Categoria:</label>
                 <select id="category" required>
                     <option value="">Selecione sua categoria</option>
@@ -345,10 +378,30 @@
                 </select>
             </div>
             
+            <div id="modality-section" class="form-group" style="display: none;">
+                <label for="modality">Modalidade:</label>
+                <select id="modality" required>
+                    <option value="">Selecione sua modalidade</option>
+                    <option value="Fast Triathlon">Fast Triathlon</option>
+                    <option value="Aquathlon">Aquathlon</option>
+                    <option value="Maratona Aquática">Maratona Aquática</option>
+                    <option value="Kids">Kids</option>
+                    <option value="Corrida Noturna">Corrida Noturna</option>
+                    <option value="Corrida">Corrida</option>
+                    <option value="Triathlon Olímpico">Triathlon Olímpico</option>
+                    <option value="Short Triathlon">Short Triathlon</option>
+                    <option value="5K">5K</option>
+                    <option value="10K">10K</option>
+                    <option value="21K">21K</option>
+                    <option value="42K">42K</option>
+                </select>
+            </div>
+            
             <div class="loading-spinner" id="register-spinner"></div>
             <button id="confirm-register-btn" class="btn btn-success">Confirmar Inscrição</button>
         </div>
     </div>
+    
     <!-- Modal de login -->
     <div id="login-modal" class="modal">
         <div class="modal-content">
@@ -398,6 +451,99 @@
                 <input type="text" id="race-image-url" placeholder="Cole a URL da imagem aqui">
             </div>
             
+            <div class="options-container">
+                <div class="options-title">Opções de Inscrição:</div>
+                <div>
+                    <input type="checkbox" id="use-categories" class="options-checkbox">
+                    <label for="use-categories">Usar Categorias</label>
+                </div>
+                <div id="categories-list" class="options-list" style="display: none;">
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-sub40" value="Sub40" checked>
+                        <label for="cat-sub40">Sub40</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-sub50" value="Sub50" checked>
+                        <label for="cat-sub50">Sub50</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-sub60" value="Sub60" checked>
+                        <label for="cat-sub60">Sub60</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-60plus" value="60+" checked>
+                        <label for="cat-60plus">60+</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-iniciantes" value="Iniciantes" checked>
+                        <label for="cat-iniciantes">Iniciantes</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-feminino" value="Feminino Open" checked>
+                        <label for="cat-feminino">Feminino Open</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-mtb" value="MTB Open" checked>
+                        <label for="cat-mtb">MTB Open</label>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <input type="checkbox" id="use-modalities" class="options-checkbox">
+                    <label for="use-modalities">Usar Modalidades</label>
+                </div>
+                <div id="modalities-list" class="options-list" style="display: none;">
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-fast" value="Fast Triathlon" checked>
+                        <label for="mod-fast">Fast Triathlon</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-aqua" value="Aquathlon" checked>
+                        <label for="mod-aqua">Aquathlon</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-maratona" value="Maratona Aquática" checked>
+                        <label for="mod-maratona">Maratona Aquática</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-corrida-noturna" value="Corrida Noturna" checked>
+                        <label for="mod-corrida-noturna">Corrida Noturna</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-corrida" value="Corrida" checked>
+                        <label for="mod-corrida">Corrida</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-tri-olimpico" value="Triathlon Olímpico" checked>
+                        <label for="mod-tri-olimpico">Triathlon Olímpico</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-short-tri" value="Short Triathlon" checked>
+                        <label for="mod-short-tri">Short Triathlon</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-5k" value="5K" checked>
+                        <label for="mod-5k">5K</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-10k" value="10K" checked>
+                        <label for="mod-10k">10K</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-21k" value="21K" checked>
+                        <label for="mod-21k">21K</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-42k" value="42K" checked>
+                        <label for="mod-42k">42K</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-kids" value="Kids" checked>
+                        <label for="mod-kids">Kids</label>
+                    </div>
+                </div>
+            </div>
+            
             <div class="loading-spinner" id="race-spinner"></div>
             <button id="save-race-btn" class="btn btn-success">Salvar Prova</button>
             <button id="delete-race-btn" class="btn btn-danger" style="display: none; margin-top: 10px;">Excluir Prova</button>
@@ -416,9 +562,9 @@
                 <input type="text" id="edit-name" required>
             </div>
             
-            <div class="form-group">
+            <div id="edit-category-section" class="form-group" style="display: none;">
                 <label for="edit-category">Categoria:</label>
-                <select id="edit-category" required>
+                <select id="edit-category">
                     <option value="Sub40">Sub40</option>
                     <option value="Sub50">Sub50</option>
                     <option value="Sub60">Sub60</option>
@@ -426,6 +572,24 @@
                     <option value="Iniciantes">Iniciantes</option>
                     <option value="Feminino Open">Feminino Open</option>
                     <option value="MTB Open">MTB Open</option>
+                </select>
+            </div>
+            
+            <div id="edit-modality-section" class="form-group" style="display: none;">
+                <label for="edit-modality">Modalidade:</label>
+                <select id="edit-modality">
+                    <option value="Fast Triathlon">Fast Triathlon</option>
+                    <option value="Aquathlon">Aquathlon</option>
+                    <option value="Maratona Aquática">Maratona Aquática</option>
+                    <option value="Kids">Kids</option>
+                    <option value="Corrida Noturna">Corrida Noturna</option>
+                    <option value="Corrida">Corrida</option>
+                    <option value="Triathlon Olímpico">Triathlon Olímpico</option>
+                    <option value="Short Triathlon">Short Triathlon</option>
+                    <option value="5K">5K</option>
+                    <option value="10K">10K</option>
+                    <option value="21K">21K</option>
+                    <option value="42K">42K</option>
                 </select>
             </div>
             
@@ -447,13 +611,12 @@
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyClzqFmEL9y_ugHnC7V4DnFiANX6RLDYzc",
-            authDomain: "teste-c702e.firebaseapp.com",
-            databaseURL: "https://teste-c702e-default-rtdb.firebaseio.com",
-            projectId: "teste-c702e",
-            storageBucket: "teste-c702e.appspot.com",
-            messagingSenderId: "478905955045",
-            appId: "1:478905955045:web:3ba118957038593fe85a0c"
+            apiKey: "AIzaSyAwkcOWdZf46_TZQlHE2N_k0C0wVbmqKks",
+            authDomain: "rankingubatubadeciclismo.firebaseapp.com",
+            projectId: "rankingubatubadeciclismo",
+            storageBucket: "rankingubatubadeciclismo.firebasestorage.app",
+            messagingSenderId: "164808638910",
+            appId: "1:164808638910:web:0278c92e92872f038939ef"
         };
         
         // Inicializar Firebase
@@ -483,6 +646,9 @@
         const birthDateInput = document.getElementById('birth-date');
         const phoneInput = document.getElementById('phone');
         const categoryInput = document.getElementById('category');
+        const modalityInput = document.getElementById('modality');
+        const categorySection = document.getElementById('category-section');
+        const modalitySection = document.getElementById('modality-section');
         const confirmLoginBtn = document.getElementById('confirm-login-btn');
         const adminEmailInput = document.getElementById('admin-email');
         const adminPasswordInput = document.getElementById('admin-password');
@@ -499,6 +665,9 @@
         const riderRaceName = document.getElementById('rider-race-name');
         const editNameInput = document.getElementById('edit-name');
         const editCategoryInput = document.getElementById('edit-category');
+        const editModalityInput = document.getElementById('edit-modality');
+        const editCategorySection = document.getElementById('edit-category-section');
+        const editModalitySection = document.getElementById('edit-modality-section');
         const editStatusInput = document.getElementById('edit-status');
         const saveRiderBtn = document.getElementById('save-rider-btn');
         const deleteRiderBtn = document.getElementById('delete-rider-btn');
@@ -506,6 +675,10 @@
         const raceSpinner = document.getElementById('race-spinner');
         const riderSpinner = document.getElementById('rider-spinner');
         const racesSpinner = document.getElementById('races-spinner');
+        const useCategoriesCheckbox = document.getElementById('use-categories');
+        const categoriesList = document.getElementById('categories-list');
+        const useModalitiesCheckbox = document.getElementById('use-modalities');
+        const modalitiesList = document.getElementById('modalities-list');
         
         // Inicializar a aplicação
         function initApp() {
@@ -537,10 +710,19 @@
             logoutBtn.addEventListener('click', logoutAdmin);
             addRaceBtn.addEventListener('click', () => openRaceModal());
             saveRaceBtn.addEventListener('click', saveRace);
-            deleteRaceBtn.addEventListener('click', deleteRace);
+            deleteRaceBtn.addEventListener('click', () => deleteRace());
             confirmRegisterBtn.addEventListener('click', confirmRegistration);
             saveRiderBtn.addEventListener('click', saveRider);
-            deleteRiderBtn.addEventListener('click', deleteRider);
+            deleteRiderBtn.addEventListener('click', () => deleteRider());
+            
+            // Event listeners para checkboxes de opções
+            useCategoriesCheckbox.addEventListener('change', function() {
+                categoriesList.style.display = this.checked ? 'flex' : 'none';
+            });
+            
+            useModalitiesCheckbox.addEventListener('change', function() {
+                modalitiesList.style.display = this.checked ? 'flex' : 'none';
+            });
             
             // Fechar modais ao clicar no X
             for (let i = 0; i < closeButtons.length; i++) {
@@ -648,17 +830,18 @@
             }
             
             const startListTable = document.createElement('table');
-startListTable.innerHTML = `
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Nome</th>
-            <th>Categoria</th>
-            ${isAdmin ? '<th>Status</th><th>Ações</th>' : ''}
-        </tr>
-    </thead>
-    <tbody id="start-list-${raceId}"></tbody>
-`;
+            startListTable.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        ${race.useCategories ? '<th>Categoria</th>' : ''}
+                        ${race.useModalities ? '<th>Modalidade</th>' : ''}
+                        ${isAdmin ? '<th>Status</th><th>Ações</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody id="start-list-${raceId}"></tbody>
+            `;
             
             // Carregar inscritos para esta prova
             loadRidersForRace(raceId, startListDiv);
@@ -729,18 +912,19 @@ startListTable.innerHTML = `
                         const statusText = getStatusText(rider.status);
                         
                         const tr = document.createElement('tr');
-tr.innerHTML = `
-    <td>${String(counter).padStart(3, '0')}</td>
-    <td>${rider.name}</td>
-    <td>${rider.category}</td>
-    ${isAdmin ? `
-    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-    <td>
-        <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
-        <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
-    </td>
-    ` : ''}
-`;
+                        tr.innerHTML = `
+                            <td>${String(counter).padStart(3, '0')}</td>
+                            <td>${rider.name}</td>
+                            ${rider.category ? `<td>${rider.category}</td>` : ''}
+                            ${rider.modality ? `<td>${rider.modality}</td>` : ''}
+                            ${isAdmin ? `
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
+                                <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
+                            </td>
+                            ` : ''}
+                        `;
                         tbody.appendChild(tr);
                         counter++;
                     });
@@ -768,6 +952,7 @@ tr.innerHTML = `
                 }
             });
         }
+        
         // Filtrar start list por status
         function filterStartList(raceId, status) {
             const tbody = document.querySelector(`#start-list-${raceId}`);
@@ -809,15 +994,15 @@ tr.innerHTML = `
         
         // Formatar data para exibição
         function formatDate(dateString) {
-  if (!dateString) return "Data inválida";
-  
-  // Ajusta para o fuso horário de Brasília (GMT-3)
-  const date = new Date(dateString);
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset() + (3 * 60)); // +3 horas
-  
-  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-  return date.toLocaleDateString('pt-BR', options);
-}
+            if (!dateString) return "Data inválida";
+            
+            // Ajusta para o fuso horário de Brasília (GMT-3)
+            const date = new Date(dateString);
+            date.setMinutes(date.getMinutes() + date.getTimezoneOffset() + (3 * 60)); // +3 horas
+            
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return date.toLocaleDateString('pt-BR', options);
+        }
         
         // Abrir modal de inscrição
         function openRegisterModal(raceId, race) {
@@ -827,6 +1012,12 @@ tr.innerHTML = `
             birthDateInput.value = '';
             phoneInput.value = '';
             categoryInput.value = '';
+            modalityInput.value = '';
+            
+            // Mostrar apenas as seções relevantes baseado nas opções da prova
+            categorySection.style.display = race.useCategories ? 'block' : 'none';
+            modalitySection.style.display = race.useModalities ? 'block' : 'none';
+            
             registerModal.style.display = 'block';
         }
         
@@ -836,6 +1027,7 @@ tr.innerHTML = `
             const birthDate = birthDateInput.value;
             const phone = phoneInput.value.trim();
             const category = categoryInput.value;
+            const modality = modalityInput.value;
             
             // Validação dos campos
             if (!name) {
@@ -854,8 +1046,17 @@ tr.innerHTML = `
                 return;
             }
             
-            if (!category) {
+            // Verificar se pelo menos uma opção foi selecionada
+            const raceSnapshot = await database.ref(`cyclingRaces/${currentRaceId}`).once('value');
+            const race = raceSnapshot.val();
+            
+            if (race.useCategories && !category) {
                 alert('Por favor, selecione sua categoria.');
+                return;
+            }
+            
+            if (race.useModalities && !modality) {
+                alert('Por favor, selecione sua modalidade.');
                 return;
             }
             
@@ -863,10 +1064,6 @@ tr.innerHTML = `
             confirmRegisterBtn.disabled = true;
             
             try {
-                // Obter dados da prova
-                const raceSnapshot = await database.ref(`cyclingRaces/${currentRaceId}`).once('value');
-                const race = raceSnapshot.val();
-                
                 // Criar objeto de inscrição
                 const registrationData = {
                     raceId: currentRaceId,
@@ -875,10 +1072,18 @@ tr.innerHTML = `
                     name,
                     birthDate,
                     phone,
-                    category,
                     status: 'pending', // Status padrão: Contato Pendente
                     registrationDate: new Date().toISOString()
                 };
+                
+                // Adicionar categoria ou modalidade conforme configurado na prova
+                if (race.useCategories) {
+                    registrationData.category = category;
+                }
+                
+                if (race.useModalities) {
+                    registrationData.modality = modality;
+                }
                 
                 // Salvar no Firebase
                 const newRef = database.ref('cyclingRegistrations').push();
@@ -888,14 +1093,22 @@ tr.innerHTML = `
                 const formattedDate = formatDate(race.date);
                 
                 // Criar mensagem para WhatsApp
-                const whatsappMsg = `Olá, gostaria de confirmar a Inscrição no Ranking Ubatuba de Ciclismo!\n\n` +
+                let whatsappMsg = `Olá, gostaria de confirmar a Inscrição no Ranking Ubatuba de Ciclismo!\n\n` +
                                   `*Prova:* ${race.name}\n` +
                                   `*Data:* ${formattedDate}\n` +
                                   `*Nome:* ${name}\n` +
                                   `*Data Nasc.:* ${birthDate}\n` +
-                                  `*Telefone:* ${phone}\n` +
-                                  `*Categoria:* ${category}\n` +
-                                  `*Valor:* R$${race.price.toFixed(2)}`;
+                                  `*Telefone:* ${phone}\n`;
+                
+                if (race.useCategories) {
+                    whatsappMsg += `*Categoria:* ${category}\n`;
+                }
+                
+                if (race.useModalities) {
+                    whatsappMsg += `*Modalidade:* ${modality}\n`;
+                }
+                
+                whatsappMsg += `*Valor:* R$${race.price.toFixed(2)}`;
                 
                 // Abrir WhatsApp
                 window.open(`https://wa.me/5512997689586?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
@@ -978,6 +1191,35 @@ tr.innerHTML = `
                 raceDescriptionInput.value = raceData.description || '';
                 raceImageUrlInput.value = raceData.imageUrl || '';
                 deleteRaceBtn.style.display = 'inline-block';
+                
+                // Configurar checkboxes de opções
+                useCategoriesCheckbox.checked = raceData.useCategories || false;
+                categoriesList.style.display = raceData.useCategories ? 'flex' : 'none';
+                
+                useModalitiesCheckbox.checked = raceData.useModalities || false;
+                modalitiesList.style.display = raceData.useModalities ? 'flex' : 'none';
+                
+                // Marcar as categorias selecionadas
+                if (raceData.useCategories) {
+                    const selectedCategories = raceData.categories || [
+                        'Sub40', 'Sub50', 'Sub60', '60+', 'Iniciantes', 'Feminino Open', 'MTB Open'
+                    ];
+                    
+                    document.querySelectorAll('#categories-list input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = selectedCategories.includes(checkbox.value);
+                    });
+                }
+                
+                // Marcar as modalidades selecionadas
+                if (raceData.useModalities) {
+                    const selectedModalities = raceData.modalities || [
+                        'Fast Triathlon', 'Aquathlon', 'Maratona Aquática', 'Kids'
+                    ];
+                    
+                    document.querySelectorAll('#modalities-list input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = selectedModalities.includes(checkbox.value);
+                    });
+                }
             } else {
                 // Modo adição
                 raceModalTitle.textContent = 'Adicionar Nova Prova';
@@ -987,6 +1229,21 @@ tr.innerHTML = `
                 raceDescriptionInput.value = '';
                 raceImageUrlInput.value = '';
                 deleteRaceBtn.style.display = 'none';
+                
+                // Resetar checkboxes de opções
+                useCategoriesCheckbox.checked = false;
+                categoriesList.style.display = 'none';
+                useModalitiesCheckbox.checked = false;
+                modalitiesList.style.display = 'none';
+                
+                // Marcar todas as categorias e modalidades por padrão
+                document.querySelectorAll('#categories-list input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                
+                document.querySelectorAll('#modalities-list input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = true;
+                });
             }
             
             raceModal.style.display = 'block';
@@ -999,9 +1256,16 @@ tr.innerHTML = `
             const price = parseFloat(racePriceInput.value);
             const description = raceDescriptionInput.value.trim();
             const imageUrl = raceImageUrlInput.value.trim();
+            const useCategories = useCategoriesCheckbox.checked;
+            const useModalities = useModalitiesCheckbox.checked;
             
             if (!name || !date || isNaN(price) || price <= 0) {
                 alert('Por favor, preencha todos os campos obrigatórios com valores válidos.');
+                return;
+            }
+            
+            if (!useCategories && !useModalities) {
+                alert('Por favor, selecione pelo menos uma opção (Categorias ou Modalidades).');
                 return;
             }
             
@@ -1015,8 +1279,28 @@ tr.innerHTML = `
                 description: description || null,
                 imageUrl: imageUrl || null,
                 status: 'open',
+                useCategories,
+                useModalities,
                 createdAt: new Date().toISOString()
             };
+            
+            // Adicionar categorias selecionadas
+            if (useCategories) {
+                const selectedCategories = [];
+                document.querySelectorAll('#categories-list input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedCategories.push(checkbox.value);
+                });
+                raceData.categories = selectedCategories;
+            }
+            
+            // Adicionar modalidades selecionadas
+            if (useModalities) {
+                const selectedModalities = [];
+                document.querySelectorAll('#modalities-list input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedModalities.push(checkbox.value);
+                });
+                raceData.modalities = selectedModalities;
+            }
             
             try {
                 if (editingRaceId) {
@@ -1040,40 +1324,45 @@ tr.innerHTML = `
         }
         
         // Excluir prova
-        async function deleteRace() {
-            if (!editingRaceId) return;
+        async function deleteRace(raceId = null) {
+            const idToDelete = raceId || editingRaceId;
             
-            if (!confirm('Tem certeza que deseja excluir esta prova? Todas as inscrições relacionadas também serão removidas.')) {
+            if (!idToDelete) {
+                alert("Nenhuma prova selecionada para exclusão!");
                 return;
             }
-            
+
+            if (!confirm('Tem certeza que deseja excluir esta prova e todas as inscrições relacionadas?')) {
+                return;
+            }
+
             raceSpinner.style.display = 'block';
             deleteRaceBtn.disabled = true;
-            
+
             try {
-                // Primeiro, excluir todas as inscrições desta prova
-                const registrationsSnapshot = await database.ref('cyclingRegistrations')
-                    .orderByChild('raceId')
-                    .equalTo(editingRaceId)
-                    .once('value');
+                // 1. Primeiro deleta todas as inscrições relacionadas
+                const registrationsRef = database.ref('cyclingRegistrations');
+                const query = registrationsRef.orderByChild('raceId').equalTo(idToDelete);
                 
-                const updates = {};
-                if (registrationsSnapshot.exists()) {
-                    registrationsSnapshot.forEach(child => {
-                        updates[`cyclingRegistrations/${child.key}`] = null;
-                    });
-                }
+                const snapshot = await query.once('value');
+                const deletePromises = [];
                 
-                // Depois excluir a prova
-                updates[`cyclingRaces/${editingRaceId}`] = null;
+                snapshot.forEach(child => {
+                    deletePromises.push(child.ref.remove());
+                });
+
+                // 2. Espera todas as exclusões de inscrições terminarem
+                await Promise.all(deletePromises);
                 
-                await database.ref().update(updates);
+                // 3. Depois deleta a prova
+                await database.ref(`cyclingRaces/${idToDelete}`).remove();
                 
+                alert('Prova e inscrições excluídas com sucesso!');
                 raceModal.style.display = 'none';
-                alert('Prova e inscrições relacionadas excluídas com sucesso!');
+                loadRaces(); // Recarrega a lista
             } catch (error) {
-                console.error('Erro ao excluir prova:', error);
-                alert('Ocorreu um erro ao excluir a prova. Por favor, tente novamente.');
+                console.error('Erro detalhado:', error);
+                alert('Erro ao excluir: ' + error.message);
             } finally {
                 raceSpinner.style.display = 'none';
                 deleteRaceBtn.disabled = false;
@@ -1107,10 +1396,25 @@ tr.innerHTML = `
                 const snapshot = await database.ref(`cyclingRegistrations/${riderId}`).once('value');
                 const rider = snapshot.val();
                 
+                // Obter dados da prova para saber quais opções mostrar
+                const raceSnapshot = await database.ref(`cyclingRaces/${rider.raceId}`).once('value');
+                const race = raceSnapshot.val();
+                
                 riderRaceName.textContent = rider.raceName;
                 editNameInput.value = rider.name;
-                editCategoryInput.value = rider.category;
                 editStatusInput.value = rider.status || 'pending';
+                
+                // Mostrar seções de categoria e modalidade conforme configurado na prova
+                editCategorySection.style.display = race.useCategories ? 'block' : 'none';
+                editModalitySection.style.display = race.useModalities ? 'block' : 'none';
+                
+                if (race.useCategories) {
+                    editCategoryInput.value = rider.category || 'Sub40';
+                }
+                
+                if (race.useModalities) {
+                    editModalityInput.value = rider.modality || 'Fast Triathlon';
+                }
                 
                 riderModal.style.display = 'block';
             } catch (error) {
@@ -1122,10 +1426,9 @@ tr.innerHTML = `
         // Salvar edição de inscrito
         async function saveRider() {
             const name = editNameInput.value.trim();
-            const category = editCategoryInput.value;
             const status = editStatusInput.value;
             
-            if (!name || !category || !status) {
+            if (!name || !status) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
@@ -1134,11 +1437,30 @@ tr.innerHTML = `
             saveRiderBtn.disabled = true;
             
             try {
-                await database.ref(`cyclingRegistrations/${currentRiderId}`).update({
+                // Obter dados atuais do inscrito para pegar raceId
+                const riderSnapshot = await database.ref(`cyclingRegistrations/${currentRiderId}`).once('value');
+                const rider = riderSnapshot.val();
+                
+                // Obter dados da prova para saber quais campos atualizar
+                const raceSnapshot = await database.ref(`cyclingRaces/${rider.raceId}`).once('value');
+                const race = raceSnapshot.val();
+                
+                const updateData = {
                     name,
-                    category,
                     status
-                });
+                };
+                
+                // Atualizar categoria se a prova usar categorias
+                if (race.useCategories) {
+                    updateData.category = editCategoryInput.value;
+                }
+                
+                // Atualizar modalidade se a prova usar modalidades
+                if (race.useModalities) {
+                    updateData.modality = editModalityInput.value;
+                }
+                
+                await database.ref(`cyclingRegistrations/${currentRiderId}`).update(updateData);
                 
                 riderModal.style.display = 'none';
                 alert('Inscrição atualizada com sucesso!');
