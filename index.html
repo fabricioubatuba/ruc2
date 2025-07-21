@@ -384,7 +384,9 @@
                     <option value="">Selecione sua modalidade</option>
                     <option value="Fast Triathlon">Fast Triathlon</option>
                     <option value="Aquathlon">Aquathlon</option>
-                    <option value="Maratona Aquática">Maratona Aquática</option>
+                    <option value="Aquathlon">Aquathlon Revezamento</option>
+                    <option value="Maratona Aquática 1500">Maratona Aquática 1500</option>
+                    <option value="Maratona Aquática 3000">Maratona Aquática 3000</option>
                     <option value="Kids">Kids</option>
                     <option value="Corrida Noturna">Corrida Noturna</option>
                     <option value="Corrida">Corrida</option>
@@ -502,8 +504,16 @@
                         <label for="mod-aqua">Aquathlon</label>
                     </div>
                     <div class="option-item">
-                        <input type="checkbox" id="mod-maratona" value="Maratona Aquática" checked>
-                        <label for="mod-maratona">Maratona Aquática</label>
+                        <input type="checkbox" id="mod-aqua-rev" value="Aquathlon Revezamento" checked>
+                        <label for="mod-aqua-rev">Aquathlon Revezamento</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-maratona-1500" value="Maratona Aquática 1500" checked>
+                        <label for="mod-maratona-1500">Maratona Aquática 1500</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="mod-maratona-3000" value="Maratona Aquática 3000" checked>
+                        <label for="mod-maratona-3000">Maratona Aquática 3000</label>
                     </div>
                     <div class="option-item">
                         <input type="checkbox" id="mod-corrida-noturna" value="Corrida Noturna" checked>
@@ -580,7 +590,9 @@
                 <select id="edit-modality">
                     <option value="Fast Triathlon">Fast Triathlon</option>
                     <option value="Aquathlon">Aquathlon</option>
-                    <option value="Maratona Aquática">Maratona Aquática</option>
+                    <option value="Aquathlon Revezamento">Aquathlon Revezamento</option>
+                    <option value="Maratona Aquática 1500">Maratona Aquática 1500</option>
+                    <option value="Maratona Aquática 3000">Maratona Aquática 3000</option>
                     <option value="Kids">Kids</option>
                     <option value="Corrida Noturna">Corrida Noturna</option>
                     <option value="Corrida">Corrida</option>
@@ -1213,7 +1225,7 @@
                 // Marcar as modalidades selecionadas
                 if (raceData.useModalities) {
                     const selectedModalities = raceData.modalities || [
-                        'Fast Triathlon', 'Aquathlon', 'Maratona Aquática', 'Kids'
+                        'Fast Triathlon', 'Aquathlon', 'Aquathlon Revezamento', 'Maratona Aquática 1500', 'Maratona Aquática 3000', 'Kids'
                     ];
                     
                     document.querySelectorAll('#modalities-list input[type="checkbox"]').forEach(checkbox => {
