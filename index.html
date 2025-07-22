@@ -225,7 +225,6 @@
             background-color: #F44336;
         }
         
-        /* Novos estilos para os status */
         .status-badge {
             display: inline-block;
             padding: 3px 8px;
@@ -293,6 +292,11 @@
             background-color: #f0f0f0;
             padding: 5px 10px;
             border-radius: 4px;
+        }
+        
+        .regulation-btn {
+            margin-top: 10px;
+            display: inline-block;
         }
         
         @keyframes spin {
@@ -452,6 +456,12 @@
             <div class="form-group image-upload">
                 <label for="race-image-url">URL da Imagem (opcional):</label>
                 <input type="text" id="race-image-url" placeholder="Cole a URL da imagem aqui">
+            </div>
+            
+            <div class="form-group">
+                <label for="regulation-link">Link do Regulamento (Google Drive):</label>
+                <input type="text" id="regulation-link" placeholder="Cole o link compartilhável do Google Drive">
+                <small>Certifique-se de que o link está configurado como "Qualquer pessoa com o link pode visualizar"</small>
             </div>
             
             <div class="options-container">
@@ -676,6 +686,7 @@
         const racePriceInput = document.getElementById('race-price');
         const raceDescriptionInput = document.getElementById('race-description');
         const raceImageUrlInput = document.getElementById('race-image-url');
+        const regulationLinkInput = document.getElementById('regulation-link');
         const saveRaceBtn = document.getElementById('save-race-btn');
         const deleteRaceBtn = document.getElementById('delete-race-btn');
         const raceModalTitle = document.getElementById('race-modal-title');
@@ -820,6 +831,18 @@
                 ` + raceElement.innerHTML;
             }
             
+            // Adicionar botão de regulamento se existir
+            if (race.regulationLink) {
+                const fileId = extractFileIdFromGoogleDriveLink(race.regulationLink);
+                const downloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                
+                raceElement.innerHTML += `
+                    <a href="${downloadLink}" class="btn btn-primary regulation-btn" download>
+                        Baixar Regulamento
+                    </a>
+                `;
+            }
+            
             if (race.status === 'open') {
                 const registerBtn = document.createElement('button');
                 registerBtn.className = 'btn btn-primary';
@@ -899,6 +922,22 @@
             }
             
             return raceElement;
+        }
+        
+        // Extrair ID do arquivo do link do Google Drive
+        function extractFileIdFromGoogleDriveLink(url) {
+            // Padrão 1: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+            const match1 = url.match(/\/file\/d\/([^\/]+)/);
+            if (match1) return match1[1];
+            
+            // Padrão 2: https://drive.google.com/open?id=FILE_ID
+            const match2 = url.match(/[&?]id=([^&]+)/);
+            if (match2) return match2[1];
+            
+            // Padrão 3: FILE_ID diretamente
+            if (!url.includes('http')) return url;
+            
+            return null;
         }
         
         // Carregar inscritos para uma prova específica
@@ -1208,6 +1247,7 @@
                 racePriceInput.value = raceData.price;
                 raceDescriptionInput.value = raceData.description || '';
                 raceImageUrlInput.value = raceData.imageUrl || '';
+                regulationLinkInput.value = raceData.regulationLink || '';
                 deleteRaceBtn.style.display = 'inline-block';
                 
                 // Configurar checkboxes de opções
@@ -1246,6 +1286,7 @@
                 racePriceInput.value = '';
                 raceDescriptionInput.value = '';
                 raceImageUrlInput.value = '';
+                regulationLinkInput.value = '';
                 deleteRaceBtn.style.display = 'none';
                 
                 // Resetar checkboxes de opções
@@ -1274,6 +1315,7 @@
             const price = parseFloat(racePriceInput.value);
             const description = raceDescriptionInput.value.trim();
             const imageUrl = raceImageUrlInput.value.trim();
+            const regulationLink = regulationLinkInput.value.trim();
             const useCategories = useCategoriesCheckbox.checked;
             const useModalities = useModalitiesCheckbox.checked;
             
@@ -1296,6 +1338,7 @@
                 price,
                 description: description || null,
                 imageUrl: imageUrl || null,
+                regulationLink: regulationLink || null,
                 status: 'open',
                 useCategories,
                 useModalities,
