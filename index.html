@@ -375,6 +375,7 @@
                     <option value="Iniciantes">Iniciantes</option>
                     <option value="Feminino Open">Feminino Open</option>
                     <option value="MTB Open">MTB Open</option>
+                    <option value="PCD">PCD</option>
                 </select>
             </div>
             
@@ -488,6 +489,10 @@
                         <input type="checkbox" id="cat-mtb" value="MTB Open" checked>
                         <label for="cat-mtb">MTB Open</label>
                     </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-pcd" value="PCD" checked>
+                        <label for="cat-mtb">PCD</label>
+                    </div>
                 </div>
                 
                 <div style="margin-top: 15px;">
@@ -582,6 +587,7 @@
                     <option value="Iniciantes">Iniciantes</option>
                     <option value="Feminino Open">Feminino Open</option>
                     <option value="MTB Open">MTB Open</option>
+                    <option value="PCD">PCD</option>
                 </select>
             </div>
             
@@ -1214,7 +1220,7 @@
                 // Marcar as categorias selecionadas
                 if (raceData.useCategories) {
                     const selectedCategories = raceData.categories || [
-                        'Sub40', 'Sub50', 'Sub60', '60+', 'Iniciantes', 'Feminino Open', 'MTB Open'
+                        'Sub40', 'Sub50', 'Sub60', '60+', 'Iniciantes', 'Feminino Open', 'MTB Open', "PCD"
                     ];
                     
                     document.querySelectorAll('#categories-list input[type="checkbox"]').forEach(checkbox => {
