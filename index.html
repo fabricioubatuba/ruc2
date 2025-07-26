@@ -380,6 +380,15 @@
                     <option value="Feminino Open">Feminino Open</option>
                     <option value="MTB Open">MTB Open</option>
                     <option value="PCD">PCD</option>
+                    <option value="Solo Feminino">Solo Feminino</option>
+                    <option value="Solo Masculino">Solo Masculino</option>
+                    <option value="Dupla Feminina">Dupla Feminina</option>
+                    <option value="Dupla Masculina">Dupla Masculina</option>
+                    <option value="Dupla Mista">Dupla Mista</option>
+                    <option value="Trio Misto">Trio Misto</option>
+                    <option value="Duathlon Cross">Duathlon Cross</option>
+                    <option value="Trail Run">Trail Run</option>
+                    <option value="Corrida Kids">Corrida Kids</option>
                 </select>
             </div>
             
@@ -503,6 +512,42 @@
                         <input type="checkbox" id="cat-pcd" value="PCD" checked>
                         <label for="cat-mtb">PCD</label>
                     </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-solof" value="Solo Feminino" checked>
+                        <label for="cat-solof">Solo Feminino</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-solom" value="Solo Masculino" checked>
+                        <label for="cat-solom">Solo Masculino</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-duplaf" value="Dupla Feminina" checked>
+                        <label for="cat-duplaf">Dupla Feminina</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-duplam" value="Dupla Masculina" checked>
+                        <label for="cat-duplam">Dupla Masculina</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-duplami" value="Dupla Mista" checked>
+                        <label for="cat-duplami">Dupla Mista</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-triomi" value="Trio Misto" checked>
+                        <label for="cat-triomi">Trio Misto</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-dua" value="Duathlon Cross" checked>
+                        <label for="cat-dua">Duathlon Cross</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-trail" value="Trail Run" checked>
+                        <label for="cat-trail">Trail Run</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="cat-corkids" value="Corrida Kids" checked>
+                        <label for="cat-corkids">Corrida Kids</label>
+                    </div>
                 </div>
                 
                 <div style="margin-top: 15px;">
@@ -598,6 +643,15 @@
                     <option value="Feminino Open">Feminino Open</option>
                     <option value="MTB Open">MTB Open</option>
                     <option value="PCD">PCD</option>
+                    <option value="Solo Feminino">Solo Feminino</option>
+                    <option value="Solo Masculino">Solo Masculino</option>
+                    <option value="Dupla Feminina">Dupla Feminina</option>
+                    <option value="Dupla Masculina">Dupla Masculina</option>
+                    <option value="Dupla Mista">Dupla Mista</option>
+                    <option value="Trio Misto">Trio Misto</option>
+                    <option value="Duathlon Cross">Duathlon Cross</option>
+                    <option value="Trail Run">Trail Run</option>
+                    <option value="Corrida Kids">Corrida Kids</option>
                 </select>
             </div>
             
@@ -1260,7 +1314,7 @@
                 // Marcar as categorias selecionadas
                 if (raceData.useCategories) {
                     const selectedCategories = raceData.categories || [
-                        'Sub40', 'Sub50', 'Sub60', '60+', 'Iniciantes', 'Feminino Open', 'MTB Open', "PCD"
+                        'Sub40', 'Sub50', 'Sub60', '60+', 'Iniciantes', 'Feminino Open', 'MTB Open', "PCD", 'Solo Feminino', 'Solo Masculino', 'Dupla Masculina', 'Dupla Feminina', 'Dupla Mista', 'Trio Misto', 'Duathlon Cross', 'Trail Run', 'Corrida Kids',
                     ];
                     
                     document.querySelectorAll('#categories-list input[type="checkbox"]').forEach(checkbox => {
