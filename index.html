@@ -875,71 +875,63 @@
         }
         
         // Criar elemento HTML para uma prova
-        function createRaceElement(raceId, race) {
-            const raceElement = document.createElement('div');
-            raceElement.className = 'race-card';
-            
-            const statusClass = race.status === 'open' ? 'status-open' : 'status-closed';
-            const statusText = race.status === 'open' ? 'Inscrições Abertas' : 'Inscrições Encerradas';
-            
-            raceElement.innerHTML = `
-                <h3 class="race-title">${race.name}</h3>
-                <div class="race-info">
-                    <span class="race-date">Data: ${formatDate(race.date)}</span>
-                    <span class="race-price">Valor: R$${race.price.toFixed(2)}</span>
-                    <span class="race-status ${statusClass}">${statusText}</span>
-                </div>
-                ${race.description ? `<p>${race.description}</p>` : ''}
-            `;
-            
-            // Adicionar imagem da prova se existir
-            if (race.imageUrl) {
-                raceElement.innerHTML = `
-                    <img src="${race.imageUrl}" alt="${race.name}" class="race-image">
-                ` + raceElement.innerHTML;
-            }
-            
-            // Adicionar botão de regulamento se existir
-            if (race.regulationLink) {
-                const fileId = extractFileIdFromGoogleDriveLink(race.regulationLink);
-                const downloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                
-                raceElement.innerHTML += `
-                    <a href="${downloadLink}" class="btn btn-primary regulation-btn" download>
-                        Baixar Regulamento
-                    </a>
-                `;
-            }
-            
-            if (race.status === 'open') {
-                const registerBtn = document.createElement('button');
-                registerBtn.className = 'btn btn-primary';
-                registerBtn.textContent = 'Fazer Inscrição';
-                registerBtn.addEventListener('click', () => openRegisterModal(raceId, race));
-                raceElement.appendChild(registerBtn);
-            }
-            
-            // Start List (Lista de Inscritos)
-            const startListDiv = document.createElement('div');
-            startListDiv.className = 'start-list';
-            startListDiv.innerHTML = `<h3>Start List</h3>`;
-            
-            // Filtro de status (apenas para admin)
-            if (isAdmin) {
-                const filterSelect = document.createElement('select');
-                filterSelect.className = 'status-filter';
-                filterSelect.innerHTML = `
-                    <option value="all">Todos os Status</option>
-                    <option value="pending">Contato Pendente</option>
-                    <option value="waiting">Aguardando Pagamento</option>
-                    <option value="completed">Pagamento Concluído</option>
-                `;
-                filterSelect.addEventListener('change', (e) => filterStartList(raceId, e.target.value));
-                startListDiv.appendChild(filterSelect);
-            }
-            
-            const startListTable = document.createElement('table');
-            startListTable.innerHTML = `
+// Criar elemento HTML para uma prova
+// Criar elemento HTML para uma prova
+function createRaceElement(raceId, race) {
+    const raceElement = document.createElement('div');
+    raceElement.className = 'race-card';
+    
+    const statusClass = race.status === 'open' ? 'status-open' : 'status-closed';
+    const statusText = race.status === 'open' ? 'Inscrições Abertas' : 'Inscrições Encerradas';
+    
+    // Usar innerHTML apenas para o conteúdo básico
+    raceElement.innerHTML = `
+        <h3 class="race-title">${race.name}</h3>
+        <div class="race-info">
+            <span class="race-date">Data: ${formatDate(race.date)}</span>
+            <span class="race-price">Valor: R$${race.price.toFixed(2)}</span>
+            <span class="race-status ${statusClass}">${statusText}</span>
+        </div>
+        ${race.description ? `<p>${race.description}</p>` : ''}
+    `;
+    
+    // Adicionar imagem da prova se existir
+    if (race.imageUrl) {
+        const imgHtml = `<img src="${race.imageUrl}" alt="${race.name}" class="race-image">`;
+        raceElement.innerHTML = imgHtml + raceElement.innerHTML;
+    }
+    
+    // Adicionar botão de regulamento se existir
+    if (race.regulationLink) {
+        const fileId = extractFileIdFromGoogleDriveLink(race.regulationLink);
+        const downloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        
+        raceElement.innerHTML += `
+            <a href="${downloadLink}" class="btn btn-primary regulation-btn" download>
+                Baixar Regulamento
+            </a>
+        `;
+    }
+    
+    if (race.status === 'open') {
+        raceElement.innerHTML += `
+            <button class="btn btn-primary register-btn">Fazer Inscrição</button>
+        `;
+    }
+    
+    // Start List (Lista de Inscritos) - SEMPRE VISÍVEL
+    raceElement.innerHTML += `
+        <div class="start-list">
+            <h3>Start List</h3>
+            ${isAdmin ? `
+            <select class="status-filter">
+                <option value="all">Todos os Status</option>
+                <option value="pending">Contato Pendente</option>
+                <option value="waiting">Aguardando Pagamento</option>
+                <option value="completed">Pagamento Concluído</option>
+            </select>
+            ` : ''}
+            <table>
                 <thead>
                     <tr>
                         <th>#</th>
@@ -950,47 +942,54 @@
                     </tr>
                 </thead>
                 <tbody id="start-list-${raceId}"></tbody>
-            `;
-            
-            // Carregar inscritos para esta prova
-            loadRidersForRace(raceId, startListDiv);
-            
-            startListDiv.appendChild(startListTable);
-            raceElement.appendChild(startListDiv);
-            
-            if (isAdmin) {
-                const adminActions = document.createElement('div');
-                adminActions.style.marginTop = '15px';
-                
-                const toggleStatusBtn = document.createElement('button');
-                toggleStatusBtn.className = 'btn ' + (race.status === 'open' ? 'btn-danger' : 'btn-success');
-                toggleStatusBtn.textContent = race.status === 'open' ? 'Encerrar Inscrições' : 'Abrir Inscrições';
-                toggleStatusBtn.style.marginRight = '10px';
-                toggleStatusBtn.addEventListener('click', () => toggleRaceStatus(raceId, race.status));
-                
-                const editRaceBtn = document.createElement('button');
-                editRaceBtn.className = 'btn btn-primary';
-                editRaceBtn.textContent = 'Editar Prova';
-                editRaceBtn.style.marginRight = '10px';
-                editRaceBtn.addEventListener('click', () => openRaceModal(raceId, race));
-                
-                const deleteRaceBtn = document.createElement('button');
-                deleteRaceBtn.className = 'btn btn-danger';
-                deleteRaceBtn.textContent = 'Excluir Prova';
-                deleteRaceBtn.addEventListener('click', () => {
-                    if (confirm('Deseja realmente excluir esta prova e todas as inscrições relacionadas?')) {
-                        deleteRace(raceId);
-                    }
-                });
-                
-                adminActions.appendChild(toggleStatusBtn);
-                adminActions.appendChild(editRaceBtn);
-                adminActions.appendChild(deleteRaceBtn);
-                raceElement.appendChild(adminActions);
+            </table>
+        </div>
+    `;
+    
+    // Adicionar event listeners após o innerHTML
+    if (race.status === 'open') {
+        const registerBtn = raceElement.querySelector('.register-btn');
+        registerBtn.addEventListener('click', () => openRegisterModal(raceId, race));
+    }
+    
+    if (isAdmin) {
+        const filterSelect = raceElement.querySelector('.status-filter');
+        filterSelect.addEventListener('change', (e) => filterStartList(raceId, e.target.value));
+        
+        raceElement.innerHTML += `
+            <div class="admin-actions" style="margin-top: 15px;">
+                <button class="btn ${race.status === 'open' ? 'btn-danger' : 'btn-success'} toggle-status-btn">
+                    ${race.status === 'open' ? 'Encerrar Inscrições' : 'Abrir Inscrições'}
+                </button>
+                <button class="btn btn-primary edit-race-btn" style="margin-right: 10px;">
+                    Editar Prova
+                </button>
+                <button class="btn btn-danger delete-race-btn">
+                    Excluir Prova
+                </button>
+            </div>
+        `;
+        
+        const toggleBtn = raceElement.querySelector('.toggle-status-btn');
+        const editBtn = raceElement.querySelector('.edit-race-btn');
+        const deleteBtn = raceElement.querySelector('.delete-race-btn');
+        
+        toggleBtn.addEventListener('click', () => toggleRaceStatus(raceId, race.status));
+        editBtn.addEventListener('click', () => openRaceModal(raceId, race));
+        deleteBtn.addEventListener('click', () => {
+            if (confirm('Deseja realmente excluir esta prova e todas as inscrições relacionadas?')) {
+                deleteRace(raceId);
             }
-            
-            return raceElement;
-        }
+        });
+    }
+    
+    // Carregar inscritos após criar todo o elemento
+    setTimeout(() => {
+        loadRidersForRace(raceId, raceElement);
+    }, 50);
+    
+    return raceElement;
+}
         
         // Extrair ID do arquivo do link do Google Drive
         function extractFileIdFromGoogleDriveLink(url) {
@@ -1009,74 +1008,83 @@
         }
         
         // Carregar inscritos para uma prova específica
-        function loadRidersForRace(raceId, container) {
-            database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(raceId).on('value', snapshot => {
-                const tbody = container.querySelector(`#start-list-${raceId}`);
-                tbody.innerHTML = '';
+        // Carregar inscritos para uma prova específica
+function loadRidersForRace(raceId, container) {
+    // Aguardar um pequeno delay para garantir que o DOM esteja renderizado
+    setTimeout(() => {
+        database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(raceId).on('value', snapshot => {
+            const tbody = document.querySelector(`#start-list-${raceId}`);
+            if (!tbody) {
+                console.error('Elemento tbody não encontrado para raceId:', raceId);
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            
+            if (snapshot.exists()) {
+                let riders = [];
+                let counter = 1;
                 
-                if (snapshot.exists()) {
-                    let riders = [];
-                    let counter = 1;
+                // Coletar todos os riders e converter para array
+                snapshot.forEach(childSnapshot => {
+                    const rider = childSnapshot.val();
+                    rider.id = childSnapshot.key;
+                    riders.push(rider);
+                });
+                
+                // Ordenar por status: pending -> waiting -> completed
+                riders.sort((a, b) => {
+                    const statusOrder = { 'pending': 1, 'waiting': 2, 'completed': 3 };
+                    return statusOrder[a.status] - statusOrder[b.status];
+                });
+                
+                // Adicionar riders à tabela
+                riders.forEach(rider => {
+                    const statusClass = getStatusClass(rider.status);
+                    const statusText = getStatusText(rider.status);
                     
-                    // Coletar todos os riders e converter para array
-                    snapshot.forEach(childSnapshot => {
-                        const rider = childSnapshot.val();
-                        rider.id = childSnapshot.key;
-                        riders.push(rider);
-                    });
-                    
-                    // Ordenar por status: pending -> waiting -> completed
-                    riders.sort((a, b) => {
-                        const statusOrder = { 'pending': 1, 'waiting': 2, 'completed': 3 };
-                        return statusOrder[a.status] - statusOrder[b.status];
-                    });
-                    
-                    // Adicionar riders à tabela
-                    riders.forEach(rider => {
-                        const statusClass = getStatusClass(rider.status);
-                        const statusText = getStatusText(rider.status);
-                        
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${String(counter).padStart(3, '0')}</td>
-                            <td>${rider.name}</td>
-                            ${rider.category ? `<td>${rider.category}</td>` : ''}
-                            ${rider.modality ? `<td>${rider.modality}</td>` : ''}
-                            ${isAdmin ? `
-                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                            <td>
-                                <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
-                                <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
-                            </td>
-                            ` : ''}
-                        `;
-                        tbody.appendChild(tr);
-                        counter++;
-                    });
-                    
-                    // Adicionar event listeners para os botões de ação
-                    if (isAdmin) {
-                        container.querySelectorAll('.edit-btn').forEach(btn => {
-                            btn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                openEditRiderModal(btn.dataset.id);
-                            });
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${String(counter).padStart(3, '0')}</td>
+                        <td>${rider.name}</td>
+                        ${rider.category ? `<td>${rider.category}</td>` : ''}
+                        ${rider.modality ? `<td>${rider.modality}</td>` : ''}
+                        ${isAdmin ? `
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="action-btn edit-btn" data-id="${rider.id}">Editar</button>
+                            <button class="action-btn delete-btn" data-id="${rider.id}">Excluir</button>
+                        </td>
+                        ` : ''}
+                    `;
+                    tbody.appendChild(tr);
+                    counter++;
+                });
+                
+                // Adicionar event listeners para os botões de ação
+                if (isAdmin) {
+                    tbody.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            openEditRiderModal(btn.dataset.id);
                         });
-                        
-                        container.querySelectorAll('.delete-btn').forEach(btn => {
-                            btn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                if (confirm('Deseja realmente excluir esta inscrição?')) {
-                                    deleteRider(btn.dataset.id);
-                                }
-                            });
+                    });
+                    
+                    tbody.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm('Deseja realmente excluir esta inscrição?')) {
+                                deleteRider(btn.dataset.id);
+                            }
                         });
-                    }
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum inscrito ainda</td></tr>';
+                    });
                 }
-            });
-        }
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum inscrito ainda</td></tr>';
+            }
+        });
+    }, 100); // Pequeno delay para garantir renderização do DOM
+}
         
         // Filtrar start list por status
         function filterStartList(raceId, status) {
