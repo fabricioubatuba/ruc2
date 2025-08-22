@@ -406,7 +406,10 @@
                     <option value="Dupla Mista">Dupla Mista</option>
                     <option value="Trio Misto">Trio Misto</option>
                     <option value="Duathlon Cross">Duathlon Cross</option>
-                    <option value="Trail Run">Trail Run</option>
+                    <option value="Trail Run 5K">Trail Run 5K</option>
+		            <option value="Trail Run 7K">Trail Run 7K</option>
+		            <option value="Trail Run 10K">Trail Run 10K</option>
+		            <option value="Trail Run 14K">Trail Run 14K</option>
                     <option value="Corrida Kids">Corrida Kids</option>
                 </select>
             </div>
@@ -560,8 +563,20 @@
                         <label for="cat-dua">Duathlon Cross</label>
                     </div>
                     <div class="option-item">
-                        <input type="checkbox" id="cat-trail" value="Trail Run" checked>
-                        <label for="cat-trail">Trail Run</label>
+                        <input type="checkbox" id="cat-trail5" value="Trail Run 5K" checked>
+                        <label for="cat-trail5">Trail Run 5K</label>
+                    </div>
+		            <div class="option-item">
+                        <input type="checkbox" id="cat-trail7" value="Trail Run 7K" checked>
+                        <label for="cat-trail7">Trail Run 7K</label>
+                    </div>
+		            <div class="option-item">
+                        <input type="checkbox" id="cat-trail10" value="Trail Run 10K" checked>
+                        <label for="cat-trail10">Trail Run 10K</label>
+                    </div>
+		            <div class="option-item">
+                        <input type="checkbox" id="cat-trail14" value="Trail Run 14K" checked>
+                        <label for="cat-trail14">Trail Run 14K</label>
                     </div>
                     <div class="option-item">
                         <input type="checkbox" id="cat-corkids" value="Corrida Kids" checked>
@@ -674,7 +689,10 @@
                     <option value="Dupla Mista">Dupla Mista</option>
                     <option value="Trio Misto">Trio Misto</option>
                     <option value="Duathlon Cross">Duathlon Cross</option>
-                    <option value="Trail Run">Trail Run</option>
+                    <option value="Trail Run 5K">Trail Run 5K</option>
+		            <option value="Trail Run 7K">Trail Run 7K</option>
+		            <option value="Trail Run 10K">Trail Run 10K</option>
+		            <option value="Trail Run 14K">Trail Run 14K</option>
                     <option value="Corrida Kids">Corrida Kids</option>
                 </select>
             </div>
@@ -1391,7 +1409,7 @@
                 // Marcar as categorias selecionadas
                 if (raceData.useCategories) {
                     const selectedCategories = raceData.categories || [
-                        'Sub40', 'Sub50', 'Sub60', '60+', 'Iniciantes', 'Feminino Open', 'MTB Open', "PCD", 'Solo Feminino', 'Solo Masculino', 'Dupla Masculina', 'Dupla Feminina', 'Dupla Mista', 'Trio Misto', 'Duathlon Cross', 'Trail Run', 'Corrida Kids',
+                        'Sub40', 'Sub50', 'Sub60', '60+', 'Iniciantes', 'Feminino Open', 'MTB Open', "PCD", 'Solo Feminino', 'Solo Masculino', 'Dupla Masculina', 'Dupla Feminina', 'Dupla Mista', 'Trio Misto', 'Duathlon Cross', 'Trail Run 5K', 'Trail Run 7K', 'Trail Run 10K', 'Trail Run 14K', 'Corrida Kids',
                     ];
                     
                     document.querySelectorAll('#categories-list input[type="checkbox"]').forEach(checkbox => {
