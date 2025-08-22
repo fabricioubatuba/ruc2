@@ -1163,21 +1163,44 @@
         
         // Abrir modal de inscrição
         function openRegisterModal(raceId, race) {
-            currentRaceId = raceId;
-            raceSelectedName.textContent = race.name;
-            fullNameInput.value = '';
-            birthDateInput.value = '';
-            phoneInput.value = '';
-            voucherCodeInput.value = '';
-            categoryInput.value = '';
-            modalityInput.value = '';
-            
-            // Mostrar apenas as seções relevantes baseado nas opções da prova
-            categorySection.style.display = race.useCategories ? 'block' : 'none';
-            modalitySection.style.display = race.useModalities ? 'block' : 'none';
-            
-            registerModal.style.display = 'block';
-        }
+    currentRaceId = raceId;
+    raceSelectedName.textContent = race.name;
+    fullNameInput.value = '';
+    birthDateInput.value = '';
+    phoneInput.value = '';
+    voucherCodeInput.value = '';
+
+    // Limpa selects antes de preencher
+    categoryInput.innerHTML = '<option value="">Selecione sua categoria</option>';
+    modalityInput.innerHTML = '<option value="">Selecione sua modalidade</option>';
+
+    // Monta as opções dinamicamente conforme a prova
+    if (race.useCategories && race.categories) {
+        race.categories.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = cat;
+            categoryInput.appendChild(opt);
+        });
+        categorySection.style.display = 'block';
+    } else {
+        categorySection.style.display = 'none';
+    }
+
+    if (race.useModalities && race.modalities) {
+        race.modalities.forEach(mod => {
+            const opt = document.createElement('option');
+            opt.value = mod;
+            opt.textContent = mod;
+            modalityInput.appendChild(opt);
+        });
+        modalitySection.style.display = 'block';
+    } else {
+        modalitySection.style.display = 'none';
+    }
+
+    registerModal.style.display = 'block';
+}
         
         // Confirmar inscrição
         async function confirmRegistration() {
