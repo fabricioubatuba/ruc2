@@ -451,6 +451,7 @@
 <option value="Trail Run Sub50 6.54km">Trail Run Sub50 6.54km</option>
 <option value="Trail Run Sub60 6.54km">Trail Run Sub60 6.54km</option>
 <option value="Trail Run 60+ 6.54km">Trail Run 60+ 6.54km</option>
+<option value="E-bike Open">E-bike Open</option>
 
                 </select>
             </div>
@@ -602,45 +603,45 @@
                         <input type="checkbox" id="cat-corkids" value="Corrida Kids" checked>
                         <label for="cat-corkids">Corrida Kids</label>
                     </div>
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Solo-Masc-Sub45" value="MTB Solo Masculino Sub45" checked>
-    <label for="cat-MTB-Solo-Masc-Sub45">MTB Solo Masculino Sub45</label>
-</div>
+			<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Solo-Masc-Sub45" value="MTB Solo Masculino Sub45" checked>
+			    <label for="cat-MTB-Solo-Masc-Sub45">MTB Solo Masculino Sub45</label>
+				</div>
 
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Solo-Masc-Over45" value="MTB Solo Masculino Over45" checked>
-    <label for="cat-MTB-Solo-Masc-Over45">MTB Solo Masculino Over45</label>
-</div>
+				<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Solo-Masc-Over45" value="MTB Solo Masculino Over45" checked>
+			    <label for="cat-MTB-Solo-Masc-Over45">MTB Solo Masculino Over45</label>
+				</div>
 
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Solo-Fem-Open" value="MTB Solo Feminino Open" checked>
-    <label for="cat-MTB-Solo-Fem-Open">MTB Solo Feminino Open</label>
-</div>
+			<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Solo-Fem-Open" value="MTB Solo Feminino Open" checked>
+			    <label for="cat-MTB-Solo-Fem-Open">MTB Solo Feminino Open</label>
+				</div>
 
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Dupla-Masc" value="MTB Dupla Masculina" checked>
-    <label for="cat-MTB-Dupla-Masc">MTB Dupla Masculina</label>
-</div>
+			<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Dupla-Masc" value="MTB Dupla Masculina" checked>
+			    <label for="cat-MTB-Dupla-Masc">MTB Dupla Masculina</label>
+			</div>
 
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Dupla-Fem" value="MTB Dupla Feminina" checked>
-    <label for="cat-MTB-Dupla-Fem">MTB Dupla Feminina</label>
-</div>
+			<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Dupla-Fem" value="MTB Dupla Feminina" checked>
+			    <label for="cat-MTB-Dupla-Fem">MTB Dupla Feminina</label>
+			</div>
 
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Dupla-Mista" value="MTB Dupla Mista" checked>
-    <label for="cat-MTB-Dupla-Mista">MTB Dupla Mista</label>
-</div>
+			<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Dupla-Mista" value="MTB Dupla Mista" checked>
+			    <label for="cat-MTB-Dupla-Mista">MTB Dupla Mista</label>
+			</div>
 
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Trio-Masc" value="MTB Trio Masculino" checked>
-    <label for="cat-MTB-Trio-Masc">MTB Trio Masculino</label>
-</div>
+			<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Trio-Masc" value="MTB Trio Masculino" checked>
+			    <label for="cat-MTB-Trio-Masc">MTB Trio Masculino</label>
+			</div>
 
-<div class="option-item">
-    <input type="checkbox" id="cat-MTB-Trio-Fem" value="MTB Trio Feminino" checked>
-    <label for="cat-MTB-Trio-Fem">MTB Trio Feminino</label>
-</div>
+			<div class="option-item">
+			    <input type="checkbox" id="cat-MTB-Trio-Fem" value="MTB Trio Feminino" checked>
+			    <label for="cat-MTB-Trio-Fem">MTB Trio Feminino</label>
+			</div>
 
 <div class="option-item">
     <input type="checkbox" id="cat-MTB-Trio-Misto" value="MTB Trio Misto" checked>
@@ -695,6 +696,11 @@
 <div class="option-item">
     <input type="checkbox" id="cat-TrailRun-60mais-6k" value="Trail Run 60+ 6.54km" checked>
     <label for="cat-TrailRun-60mais-6k">Trail Run 60+ 6.54km</label>
+</div>
+
+<div class="option-item">
+    <input type="checkbox" id="cat-Ebike-Open" value="E-bike Open" checked>
+    <label for="cat-Ebike-Open">E-bike Open</label>
 </div>
 
                 </div>
@@ -828,6 +834,7 @@
 			<option value="Trail Run Sub50 6.54km">Trail Run Sub50 6.54km</option>
 			<option value="Trail Run Sub60 6.54km">Trail Run Sub60 6.54km</option>
 			<option value="Trail Run 60+ 6.54km">Trail Run 60+ 6.54km</option>
+			<option value="E-bike Open">E-bike Open</option>
 
                 </select>
             </div>
@@ -1095,14 +1102,21 @@
                     ` : ''}
                     <table>
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Nome</th>
-                                ${race.useCategories ? '<th>Categoria</th>' : ''}
-                                ${race.useModalities ? '<th>Modalidade</th>' : ''}
-                                ${isAdmin ? '<th>Status</th><th>Ações</th>' : ''}
-                            </tr>
-                        </thead>
+			    <tr>
+ 			       <th>#</th>
+			        <th>Nome</th>
+ 			       ${race.useCategories ? '<th>Categoria</th>' : ''}
+ 			       ${race.useModalities ? '<th>Modalidade</th>' : ''}
+			        ${isAdmin ? `
+ 			           <th>Data de Nascimento</th>
+ 			           <th>Telefone</th>
+    			           <th>Voucher</th>
+            			   <th>Status</th>
+                                   <th>Ações</th>
+        ` : ''}
+    </tr>
+</thead>
+
                         <tbody id="start-list-${raceId}"></tbody>
                     </table>
                 </div>
@@ -1222,18 +1236,22 @@
                             
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                                <td>${String(counter).padStart(3, '0')}</td>
-                                <td>${rider.name}</td>
-                                ${rider.category ? `<td>${rider.category}</td>` : ''}
-                                ${rider.modality ? `<td>${rider.modality}</td>` : ''}
-                                ${isAdmin ? `
-                                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                                <td>
-                                    <button class="action-btn edit-btn" data-rider-id="${rider.id}">Editar</button>
-                                    <button class="action-btn delete-btn" data-rider-id="${rider.id}">Excluir</button>
-                                </td>
-                                ` : ''}
-                            `;
+    				<td>${String(counter).padStart(3, '0')}</td>
+    				<td>${rider.name}</td>
+ 				   ${rider.category ? `<td>${rider.category}</td>` : ''}
+ 				   ${rider.modality ? `<td>${rider.modality}</td>` : ''}
+				    ${isAdmin ? `
+ 				       <td>${rider.birthDate || '-'}</td>
+				        <td>${rider.phone || '-'}</td>
+ 				       <td>${rider.voucherCode || '-'}</td>
+ 				       <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+ 				       <td>
+   				         <button class="action-btn edit-btn" data-rider-id="${rider.id}">Editar</button>
+   				         <button class="action-btn delete-btn" data-rider-id="${rider.id}">Excluir</button>
+  				      </td>
+ 				   ` : ''}
+				`;
+
                             tbody.appendChild(tr);
                             counter++;
                         });
