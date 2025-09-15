@@ -1088,9 +1088,10 @@
                 `;
             }
             
-            // Start List (Lista de Inscritos) - SEMPRE VISÍVEL
+            // Start List (Lista de Inscritos) - AGORA OCULTO POR PADRÃO
             raceElement.innerHTML += `
-                <div class="start-list">
+                <button class="btn btn-primary toggle-startlist-btn" data-target="start-list-container-${raceId}">Ver Start List</button>
+                <div class="start-list" id="start-list-container-${raceId}" style="display: none;">
                     <h3>Start List</h3>
                     ${isAdmin ? `
                     <select class="status-filter" data-race-id="${raceId}">
@@ -1102,20 +1103,20 @@
                     ` : ''}
                     <table>
                         <thead>
-			    <tr>
- 			       <th>#</th>
-			        <th>Nome</th>
- 			       ${race.useCategories ? '<th>Categoria</th>' : ''}
- 			       ${race.useModalities ? '<th>Modalidade</th>' : ''}
-			        ${isAdmin ? `
- 			           <th>Data de Nascimento</th>
- 			           <th>Telefone</th>
-    			           <th>Voucher</th>
-            			   <th>Status</th>
+                            <tr>
+                               <th>#</th>
+                                <th>Nome</th>
+                               ${race.useCategories ? '<th>Categoria</th>' : ''}
+                               ${race.useModalities ? '<th>Modalidade</th>' : ''}
+                                ${isAdmin ? `
+                                   <th>Data de Nascimento</th>
+                                   <th>Telefone</th>
+                                   <th>Voucher</th>
+                                   <th>Status</th>
                                    <th>Ações</th>
-        ` : ''}
-    </tr>
-</thead>
+                                ` : ''}
+                            </tr>
+                        </thead>
 
                         <tbody id="start-list-${raceId}"></tbody>
                     </table>
@@ -1146,7 +1147,21 @@
                     registerBtn.addEventListener('click', () => openRegisterModal(raceId, race));
                 }
                 
-                // Filtro de status
+                
+                // Botão de mostrar/ocultar Start List
+                const toggleStartBtn = raceElement.querySelector('.toggle-startlist-btn');
+                if (toggleStartBtn) {
+                    toggleStartBtn.addEventListener('click', (e) => {
+                        const targetId = e.currentTarget.getAttribute('data-target');
+                        const targetEl = document.getElementById(targetId);
+                        if (targetEl) {
+                            const isHidden = targetEl.style.display === 'none' || targetEl.style.display === '';
+                            targetEl.style.display = isHidden ? 'block' : 'none';
+                            toggleStartBtn.textContent = isHidden ? 'Ocultar Start List' : 'Ver Start List';
+                        }
+                    });
+                }
+// Filtro de status
                 if (isAdmin) {
                     const filterSelect = raceElement.querySelector('.status-filter');
                     filterSelect.addEventListener('change', (e) => filterStartList(raceId, e.target.value));
