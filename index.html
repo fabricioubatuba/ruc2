@@ -825,40 +825,6 @@
                             <option value="60+">60+</option>
                             <option value="Iniciantes">Iniciantes</option>
                             <option value="Feminino Open">Feminino Open</option>
-                            <option value="MTB Open">MTB Open</option>
-                            <option value="PCD">PCD</option>
-                            <option value="Solo Feminino">Solo Feminino</option>
-                            <option value="Solo Masculino">Solo Masculino</option>
-                            <option value="Dupla Feminina">Dupla Feminina</option>
-                            <option value="Dupla Masculina">Dupla Masculina</option>
-                            <option value="Dupla Mista">Dupla Mista</option>
-                            <option value="Trio Misto">Trio Misto</option>
-                            <option value="Duathlon Cross">Duathlon Cross</option>
-                            <option value="Trail Run 5K">Trail Run 5K</option>
-                            <option value="Trail Run 7K">Trail Run 7K</option>
-                            <option value="Trail Run 10K">Trail Run 10K</option>
-                            <option value="Trail Run 14K">Trail Run 14K</option>
-                            <option value="Corrida Kids">Corrida Kids</option>
-                            <option value="MTB Solo Masculino Sub45">MTB Solo Masculino Sub45</option>
-                            <option value="MTB Solo Masculino Over45">MTB Solo Masculino Over45</option>
-                            <option value="MTB Solo Feminino Open">MTB Solo Feminino Open</option>
-                            <option value="MTB Dupla Masculina">MTB Dupla Masculina</option>
-                            <option value="MTB Dupla Feminina">MTB Dupla Feminina</option>
-                            <option value="MTB Dupla Mista">MTB Dupla Mista</option>
-                            <option value="MTB Trio Masculino">MTB Trio Masculino</option>
-                            <option value="MTB Trio Feminino">MTB Trio Feminino</option>
-                            <option value="MTB Trio Misto">MTB Trio Misto</option>
-                            <option value="MTB Solo Peso Pesado +95kg">MTB Solo Peso Pesado +95kg</option>
-                            <option value="Duathlon Cross Masculino open">Duathlon Cross Masculino open</option>
-                            <option value="Duathlon Cross Feminino Open">Duathlon Cross Feminino Open</option>
-                            <option value="Trail Run Kids 200 metros">Trail Run Kids 200 metros</option>
-                            <option value="Trail Run Sub20 6.54km">Trail Run Sub20 6.54km</option>
-                            <option value="Trail Run Sub30 6.54km">Trail Run Sub30 6.54km</option>
-                            <option value="Trail Run Sub40 6.54km">Trail Run Sub40 6.54km</option>
-                            <option value="Trail Run Sub50 6.54km">Trail Run Sub50 6.54km</option>
-                            <option value="Trail Run Sub60 6.54km">Trail Run Sub60 6.54km</option>
-                            <option value="Trail Run 60+ 6.54km">Trail Run 60+ 6.54km</option>
-                            <option value="E-bike Open">E-bike Open</option>
                         </select>
                     </div>
                     
@@ -872,35 +838,6 @@
                             <option value="Aquathlon Revezamento">Aquathlon Revezamento</option>
                             <option value="Maratona Aquática 1500">Maratona Aquática 1500</option>
                             <option value="Maratona Aquática 3000">Maratona Aquática 3000</option>
-                            <option value="Kids">Kids</option>
-                            <option value="Corrida Noturna">Corrida Noturna</option>
-                            <option value="Corrida">Corrida</option>
-                            <option value="Triathlon Olímpico">Triathlon Olímpico</option>
-                            <option value="Short Triathlon">Short Triathlon</option>
-                            <option value="5K">5K</option>
-                            <option value="10K">10K</option>
-                            <option value="21K">21K</option>
-                            <option value="42K">42K</option>
-                            <option value="MTB Solo Masculino Sub45">MTB Solo Masculino Sub45</option>
-                            <option value="MTB Solo Masculino Over45">MTB Solo Masculino Over45</option>
-                            <option value="MTB Solo Feminino Open">MTB Solo Feminino Open</option>
-                            <option value="MTB Dupla Masculina">MTB Dupla Masculina</option>
-                            <option value="MTB Dupla Feminina">MTB Dupla Feminina</option>
-                            <option value="MTB Dupla Mista">MTB Dupla Mista</option>
-                            <option value="MTB Trio Masculino">MTB Trio Masculino</option>
-                            <option value="MTB Trio Feminino">MTB Trio Feminino</option>
-                            <option value="MTB Trio Misto">MTB Trio Misto</option>
-                            <option value="MTB Solo Peso Pesado +95kg">MTB Solo Peso Pesado +95kg</option>
-                            <option value="Duathlon Cross Masculino open">Duathlon Cross Masculino open</option>
-                            <option value="Duathlon Cross Feminino Open">Duathlon Cross Feminino Open</option>
-                            <option value="Trail Run Kids 200 metros">Trail Run Kids 200 metros</option>
-                            <option value="Trail Run Sub20 6.54km">Trail Run Sub20 6.54km</option>
-                            <option value="Trail Run Sub30 6.54km">Trail Run Sub30 6.54km</option>
-                            <option value="Trail Run Sub40 6.54km">Trail Run Sub40 6.54km</option>
-                            <option value="Trail Run Sub50 6.54km">Trail Run Sub50 6.54km</option>
-                            <option value="Trail Run Sub60 6.54km">Trail Run Sub60 6.54km</option>
-                            <option value="Trail Run 60+ 6.54km">Trail Run 60+ 6.54km</option>
-                            <option value="E-bike Open">E-bike Open</option>
                         </select>
                     </div>
                     
@@ -920,15 +857,17 @@
                     <span class="close">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="admin-email">Email:</label>
-                        <input type="email" id="admin-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="admin-password">Senha:</label>
-                        <input type="password" id="admin-password" required>
-                    </div>
-                    <p id="login-error" style="color: var(--accent); display: none;">Email ou senha incorretos.</p>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="admin-email">Email:</label>
+                            <input type="email" id="admin-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-password">Senha:</label>
+                            <input type="password" id="admin-password" required>
+                        </div>
+                        <p id="login-error" style="color: var(--accent); display: none;">Email ou senha incorretos.</p>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button id="confirm-login-btn" class="btn btn-success">Login</button>
@@ -995,18 +934,6 @@
                                 <input type="checkbox" id="cat-sub60" value="Sub60" checked>
                                 <label for="cat-sub60">Sub60</label>
                             </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="cat-60plus" value="60+" checked>
-                                <label for="cat-60plus">60+</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="cat-iniciantes" value="Iniciantes" checked>
-                                <label for="cat-iniciantes">Iniciantes</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="cat-feminino" value="Feminino Open" checked>
-                                <label for="cat-feminino">Feminino Open</label>
-                            </div>
                         </div>
                         
                         <div style="margin-top: 15px;">
@@ -1021,18 +948,6 @@
                             <div class="option-item">
                                 <input type="checkbox" id="mod-aquathlon" value="Aquathlon" checked>
                                 <label for="mod-aquathlon">Aquathlon</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="mod-aquathlon-relay" value="Aquathlon Revezamento" checked>
-                                <label for="mod-aquathlon-relay">Aquathlon Revezamento</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="mod-maratona-1500" value="Maratona Aquática 1500" checked>
-                                <label for="mod-maratona-1500">Maratona Aquática 1500</label>
-                            </div>
-                            <div class="option-item">
-                                <input type="checkbox" id="mod-maratona-3000" value="Maratona Aquática 3000" checked>
-                                <label for="mod-maratona-3000">Maratona Aquática 3000</label>
                             </div>
                         </div>
                     </div>
@@ -1084,15 +999,15 @@
     </div>
 
     <script>
-        // Configuração do Firebase
+        // Configuração do Firebase - USANDO AS CREDENCIAIS ORIGINAIS DO SEU PROJETO
         const firebaseConfig = {
-            apiKey: "AIzaSyBp8b2d6VJ5hHnQj7Z8Q9XqYz1rA2B3C4D",
-            authDomain: "ranking-ubatuba-ciclismo.firebaseapp.com",
-            databaseURL: "https://ranking-ubatuba-ciclismo-default-rtdb.firebaseio.com",
-            projectId: "ranking-ubatuba-ciclismo",
-            storageBucket: "ranking-ubatuba-ciclismo.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+            apiKey: "AIzaSyAwkcOWdZf46_TZQlHE2N_k0C0wVbmqKks",
+            authDomain: "rankingubatubadeciclismo.firebaseapp.com",
+            databaseURL: "https://rankingubatubadeciclismo-default-rtdb.firebaseio.com",
+            projectId: "rankingubatubadeciclismo",
+            storageBucket: "rankingubatubadeciclismo.firebasestorage.app",
+            messagingSenderId: "164808638910",
+            appId: "1:164808638910:web:0278c92e92872f038939ef"
         };
 
         // Inicializar Firebase
@@ -1100,29 +1015,12 @@
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // Elementos da interface
-        const racesContainer = document.getElementById('races-container');
-        const finishedRacesContainer = document.getElementById('finished-races-container');
-        const loginSection = document.getElementById('login-section');
-        const adminPanel = document.getElementById('admin-panel');
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const addRaceBtn = document.getElementById('add-race-btn');
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const modals = document.querySelectorAll('.modal');
-        const closeButtons = document.querySelectorAll('.close');
-        const confirmRegisterBtn = document.getElementById('confirm-register-btn');
-        const confirmLoginBtn = document.getElementById('confirm-login-btn');
-        const saveRaceBtn = document.getElementById('save-race-btn');
-        const closeInscriptionsBtn = document.getElementById('close-inscriptions-btn');
-
         // Estado da aplicação
         let currentUser = null;
         let selectedRace = null;
         let editingRace = null;
 
-        // Inicializar a aplicação
+        // Inicializar a aplicação quando o DOM estiver pronto
         document.addEventListener('DOMContentLoaded', function() {
             initApp();
             setupEventListeners();
@@ -1134,28 +1032,30 @@
             auth.onAuthStateChanged(user => {
                 if (user) {
                     currentUser = user;
-                    loginSection.style.display = 'none';
-                    adminPanel.style.display = 'block';
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('admin-panel').style.display = 'block';
+                    console.log('Usuário logado:', user.email);
                 } else {
                     currentUser = null;
-                    loginSection.style.display = 'block';
-                    adminPanel.style.display = 'none';
+                    document.getElementById('login-section').style.display = 'block';
+                    document.getElementById('admin-panel').style.display = 'none';
+                    console.log('Usuário não logado');
                 }
             });
         }
 
         function setupEventListeners() {
             // Tabs
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
                     
                     // Ativar tab clicada
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
                     
                     // Mostrar conteúdo correspondente
-                    tabContents.forEach(content => {
+                    document.querySelectorAll('.tab-content').forEach(content => {
                         content.classList.remove('active');
                         if (content.id === tabId) {
                             content.classList.add('active');
@@ -1170,32 +1070,27 @@
             });
 
             // Botões de login/logout
-            loginBtn.addEventListener('click', () => openModal('login-modal'));
-            logoutBtn.addEventListener('click', logout);
+            document.getElementById('login-btn').addEventListener('click', () => openModal('login-modal'));
+            document.getElementById('logout-btn').addEventListener('click', logout);
 
             // Botão para adicionar prova
-            addRaceBtn.addEventListener('click', () => {
+            document.getElementById('add-race-btn').addEventListener('click', () => {
                 editingRace = null;
                 document.getElementById('race-modal-title').textContent = 'Adicionar Nova Prova';
-                document.getElementById('race-name').value = '';
-                document.getElementById('race-date').value = '';
-                document.getElementById('race-price').value = '';
-                document.getElementById('race-description').value = '';
-                document.getElementById('race-image-url').value = '';
-                document.getElementById('regulation-link').value = '';
+                clearRaceForm();
                 openModal('race-modal');
             });
 
             // Fechar modais
-            closeButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    modals.forEach(modal => modal.style.display = 'none');
+            document.querySelectorAll('.close').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
                 });
             });
 
             // Fechar modal ao clicar fora
-            window.addEventListener('click', (event) => {
-                modals.forEach(modal => {
+            window.addEventListener('click', function(event) {
+                document.querySelectorAll('.modal').forEach(modal => {
                     if (event.target === modal) {
                         modal.style.display = 'none';
                     }
@@ -1203,16 +1098,16 @@
             });
 
             // Botão de confirmação de inscrição
-            confirmRegisterBtn.addEventListener('click', registerForRace);
+            document.getElementById('confirm-register-btn').addEventListener('click', registerForRace);
 
             // Botão de login
-            confirmLoginBtn.addEventListener('click', login);
+            document.getElementById('confirm-login-btn').addEventListener('click', login);
 
             // Botão de salvar prova
-            saveRaceBtn.addEventListener('click', saveRace);
+            document.getElementById('save-race-btn').addEventListener('click', saveRace);
 
             // Botão de fechar inscrições
-            closeInscriptionsBtn.addEventListener('click', () => closeModal('inscriptions-modal'));
+            document.getElementById('close-inscriptions-btn').addEventListener('click', () => closeModal('inscriptions-modal'));
 
             // Máscaras para os campos
             $('#birth-date').mask('00-00-0000');
@@ -1239,47 +1134,43 @@
         function loadRaces() {
             showSpinner('races-spinner');
             
+            // Tenta carregar da estrutura nova primeiro, depois da antiga
             database.ref('races').once('value')
                 .then(snapshot => {
-                    const races = snapshot.val() || {};
-                    racesContainer.innerHTML = '';
+                    let races = [];
                     
-                    const currentDate = new Date();
-                    
-                    Object.keys(races).forEach(raceId => {
-                        const race = races[raceId];
-                        race.id = raceId;
-                        
-                        // Verificar se a prova ainda está ativa (data no futuro)
-                        const raceDate = new Date(race.date);
-                        if (raceDate >= currentDate) {
-                            displayRaceCard(race, racesContainer);
-                        }
-                    });
-                    
-                    hideSpinner('races-spinner');
-                    
-                    // Se não há provas ativas, mostrar estado vazio
-                    if (racesContainer.children.length === 0) {
-                        racesContainer.innerHTML = `
-                            <div class="empty-state">
-                                <i>🚴</i>
-                                <h3>Nenhuma prova ativa no momento</h3>
-                                <p>Fique atento para as próximas competições!</p>
-                            </div>
-                        `;
+                    if (snapshot.exists()) {
+                        // Nova estrutura encontrada
+                        snapshot.forEach(childSnapshot => {
+                            const race = childSnapshot.val();
+                            race.id = childSnapshot.key;
+                            races.push(race);
+                        });
+                    } else {
+                        // Tenta carregar da estrutura antiga
+                        return database.ref('cyclingRaces').once('value')
+                            .then(oldSnapshot => {
+                                if (oldSnapshot.exists()) {
+                                    oldSnapshot.forEach(childSnapshot => {
+                                        const race = childSnapshot.val();
+                                        race.id = childSnapshot.key;
+                                        races.push(race);
+                                    });
+                                }
+                                return races;
+                            });
                     }
+                    
+                    return races;
+                })
+                .then(races => {
+                    displayRaces(races, 'races-container');
+                    hideSpinner('races-spinner');
                 })
                 .catch(error => {
                     console.error('Erro ao carregar provas:', error);
                     hideSpinner('races-spinner');
-                    racesContainer.innerHTML = `
-                        <div class="empty-state">
-                            <i>⚠️</i>
-                            <h3>Erro ao carregar provas</h3>
-                            <p>Tente recarregar a página.</p>
-                        </div>
-                    `;
+                    showError('races-container', 'Erro ao carregar provas');
                 });
         }
 
@@ -1288,103 +1179,159 @@
             
             database.ref('races').once('value')
                 .then(snapshot => {
-                    const races = snapshot.val() || {};
-                    finishedRacesContainer.innerHTML = '';
-                    
+                    const races = [];
                     const currentDate = new Date();
                     
-                    Object.keys(races).forEach(raceId => {
-                        const race = races[raceId];
-                        race.id = raceId;
-                        
-                        // Verificar se a prova já finalizou (data no passado)
-                        const raceDate = new Date(race.date);
-                        if (raceDate < currentDate) {
-                            displayRaceCard(race, finishedRacesContainer, true);
-                        }
-                    });
-                    
-                    hideSpinner('finished-races-spinner');
-                    
-                    // Se não há provas finalizadas, mostrar estado vazio
-                    if (finishedRacesContainer.children.length === 0) {
-                        finishedRacesContainer.innerHTML = `
-                            <div class="empty-state">
-                                <i>🏆</i>
-                                <h3>Nenhum evento finalizado</h3>
-                                <p>Os resultados aparecerão aqui após as competições.</p>
-                            </div>
-                        `;
+                    if (snapshot.exists()) {
+                        snapshot.forEach(childSnapshot => {
+                            const race = childSnapshot.val();
+                            race.id = childSnapshot.key;
+                            
+                            // Considera finalizada se a data já passou
+                            const raceDate = new Date(race.date);
+                            if (raceDate < currentDate) {
+                                races.push(race);
+                            }
+                        });
                     }
+                    
+                    displayRaces(races, 'finished-races-container', true);
+                    hideSpinner('finished-races-spinner');
                 })
                 .catch(error => {
                     console.error('Erro ao carregar provas finalizadas:', error);
                     hideSpinner('finished-races-spinner');
-                    finishedRacesContainer.innerHTML = `
-                        <div class="empty-state">
-                            <i>⚠️</i>
-                            <h3>Erro ao carregar eventos</h3>
-                            <p>Tente recarregar a página.</p>
-                        </div>
-                    `;
+                    showError('finished-races-container', 'Erro ao carregar eventos finalizados');
                 });
         }
 
-        function displayRaceCard(race, container, isFinished = false) {
-            const raceDate = new Date(race.date);
-            const formattedDate = formatDate(raceDate);
-            const status = isFinished ? 'Finalizada' : (raceDate < new Date() ? 'Encerrada' : 'Inscrições Abertas');
-            const statusClass = isFinished ? 'status-finished' : (raceDate < new Date() ? 'status-closed' : 'status-open');
+        function displayRaces(races, containerId, isFinished = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
             
-            const raceCard = document.createElement('div');
-            raceCard.className = 'race-card';
-            raceCard.innerHTML = `
-                <div class="race-image-container">
-                    <img src="${race.imageUrl || 'assets/img/default-race.jpg'}" alt="${race.name}" class="race-image" onerror="this.src='assets/img/default-race.jpg'">
-                </div>
-                <div class="race-content">
-                    <div class="race-header">
-                        <h3 class="race-title">${race.name}</h3>
-                        <span class="race-status ${statusClass}">${status}</span>
+            if (races.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i>${isFinished ? '🏆' : '🚴'}</i>
+                        <h3>${isFinished ? 'Nenhum evento finalizado' : 'Nenhuma prova ativa no momento'}</h3>
+                        <p>${isFinished ? 'Os resultados aparecerão aqui após as competições.' : 'Fique atento para as próximas competições!'}</p>
                     </div>
-                    <div class="race-info">
-                        <span class="race-date">${formattedDate}</span>
-                        <span class="race-price">R$ ${parseFloat(race.price).toFixed(2)}</span>
-                    </div>
-                    ${race.description ? `<p class="race-description">${race.description}</p>` : ''}
-                    <div class="race-actions">
-                        ${!isFinished && raceDate >= new Date() ? `
-                            <button class="btn btn-primary register-btn" data-race-id="${race.id}">Inscrever-se</button>
-                        ` : ''}
-                        ${race.regulationLink ? `
-                            <a href="${race.regulationLink}" target="_blank" class="btn btn-outline btn-small">Ver Regulamento</a>
-                        ` : ''}
-                        ${currentUser ? `
-                            <button class="btn btn-warning btn-small view-inscriptions-btn" data-race-id="${race.id}">Ver Inscritos</button>
-                            <button class="btn btn-primary btn-small edit-race-btn" data-race-id="${race.id}">Editar</button>
-                            <button class="btn btn-danger btn-small delete-race-btn" data-race-id="${race.id}">Excluir</button>
-                        ` : ''}
-                    </div>
-                </div>
-            `;
-            
-            container.appendChild(raceCard);
-            
-            // Adicionar event listeners aos botões
-            if (!isFinished && raceDate >= new Date()) {
-                const registerBtn = raceCard.querySelector('.register-btn');
-                registerBtn.addEventListener('click', () => openRegistrationModal(race));
+                `;
+                return;
             }
             
-            if (currentUser) {
-                const viewInscriptionsBtn = raceCard.querySelector('.view-inscriptions-btn');
-                viewInscriptionsBtn.addEventListener('click', () => viewInscriptions(race));
+            const racesGrid = document.createElement('div');
+            racesGrid.className = 'races-grid';
+            
+            races.forEach(race => {
+                const raceDate = new Date(race.date);
+                const formattedDate = formatDate(raceDate);
+                const status = getRaceStatus(race, isFinished);
+                const statusClass = getStatusClass(status);
                 
-                const editBtn = raceCard.querySelector('.edit-race-btn');
-                editBtn.addEventListener('click', () => editRace(race));
+                const raceCard = document.createElement('div');
+                raceCard.className = 'race-card';
+                raceCard.innerHTML = `
+                    <div class="race-image-container">
+                        <img src="${race.imageUrl || getDefaultRaceImage(race)}" alt="${race.name}" class="race-image">
+                    </div>
+                    <div class="race-content">
+                        <div class="race-header">
+                            <h3 class="race-title">${race.name}</h3>
+                            <span class="race-status ${statusClass}">${status}</span>
+                        </div>
+                        <div class="race-info">
+                            <span class="race-date">${formattedDate}</span>
+                            <span class="race-price">R$ ${parseFloat(race.price || 0).toFixed(2)}</span>
+                        </div>
+                        ${race.description ? `<p class="race-description">${race.description}</p>` : ''}
+                        <div class="race-actions">
+                            ${!isFinished && raceDate >= new Date() ? `
+                                <button class="btn btn-primary register-btn" data-race-id="${race.id}">Inscrever-se</button>
+                            ` : ''}
+                            ${race.regulationLink ? `
+                                <a href="${race.regulationLink}" target="_blank" class="btn btn-outline btn-small">Ver Regulamento</a>
+                            ` : ''}
+                            ${currentUser ? `
+                                <button class="btn btn-warning btn-small view-inscriptions-btn" data-race-id="${race.id}">Ver Inscritos</button>
+                                <button class="btn btn-primary btn-small edit-race-btn" data-race-id="${race.id}">Editar</button>
+                                <button class="btn btn-danger btn-small delete-race-btn" data-race-id="${race.id}">Excluir</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
                 
-                const deleteBtn = raceCard.querySelector('.delete-race-btn');
-                deleteBtn.addEventListener('click', () => deleteRace(race.id));
+                racesGrid.appendChild(raceCard);
+            });
+            
+            container.appendChild(racesGrid);
+            
+            // Adicionar event listeners aos botões
+            setTimeout(() => {
+                document.querySelectorAll('.register-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const raceId = this.getAttribute('data-race-id');
+                        const race = races.find(r => r.id === raceId);
+                        if (race) openRegistrationModal(race);
+                    });
+                });
+                
+                if (currentUser) {
+                    document.querySelectorAll('.view-inscriptions-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const raceId = this.getAttribute('data-race-id');
+                            const race = races.find(r => r.id === raceId);
+                            if (race) viewInscriptions(race);
+                        });
+                    });
+                    
+                    document.querySelectorAll('.edit-race-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const raceId = this.getAttribute('data-race-id');
+                            const race = races.find(r => r.id === raceId);
+                            if (race) editRace(race);
+                        });
+                    });
+                    
+                    document.querySelectorAll('.delete-race-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const raceId = this.getAttribute('data-race-id');
+                            deleteRace(raceId);
+                        });
+                    });
+                }
+            }, 100);
+        }
+
+        function getRaceStatus(race, isFinished) {
+            if (isFinished) return 'Finalizada';
+            
+            const raceDate = new Date(race.date);
+            const today = new Date();
+            
+            if (raceDate < today) return 'Encerrada';
+            if (race.registrationOpen === false) return 'Inscrições Encerradas';
+            return 'Inscrições Abertas';
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Inscrições Abertas': return 'status-open';
+                case 'Inscrições Encerradas': return 'status-closed';
+                case 'Finalizada': return 'status-finished';
+                case 'Encerrada': return 'status-closed';
+                default: return 'status-closed';
+            }
+        }
+
+        function getDefaultRaceImage(race) {
+            const name = race.name.toLowerCase();
+            if (name.includes('ciclismo') || name.includes('mtb') || name.includes('bike')) {
+                return 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60';
+            } else if (name.includes('corrida') || name.includes('run') || name.includes('maratona')) {
+                return 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60';
+            } else {
+                return 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60';
             }
         }
 
@@ -1396,24 +1343,8 @@
             const categorySection = document.getElementById('category-section');
             const modalitySection = document.getElementById('modality-section');
             
-            if (race.useCategories) {
-                categorySection.style.display = 'block';
-                modalitySection.style.display = 'none';
-            } else if (race.useModalities) {
-                categorySection.style.display = 'none';
-                modalitySection.style.display = 'block';
-            } else {
-                categorySection.style.display = 'none';
-                modalitySection.style.display = 'none';
-            }
-            
-            // Limpar campos
-            document.getElementById('full-name').value = '';
-            document.getElementById('birth-date').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('voucher-code').value = '';
-            document.getElementById('category').value = '';
-            document.getElementById('modality').value = '';
+            categorySection.style.display = race.useCategories ? 'block' : 'none';
+            modalitySection.style.display = race.useModalities ? 'block' : 'none';
             
             openModal('register-modal');
         }
@@ -1424,21 +1355,8 @@
             const phone = document.getElementById('phone').value.trim();
             const voucherCode = document.getElementById('voucher-code').value.trim();
             
-            // Validações básicas
             if (!fullName || !birthDate || !phone) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-            
-            // Validar formato da data
-            if (!isValidDate(birthDate)) {
-                alert('Por favor, insira uma data válida no formato DD-MM-AAAA.');
-                return;
-            }
-            
-            // Validar telefone
-            if (phone.replace(/\D/g, '').length < 10) {
-                alert('Por favor, insira um telefone válido.');
                 return;
             }
             
@@ -1451,7 +1369,9 @@
                     alert('Por favor, selecione uma categoria.');
                     return;
                 }
-            } else if (selectedRace.useModalities) {
+            }
+            
+            if (selectedRace.useModalities) {
                 modality = document.getElementById('modality').value;
                 if (!modality) {
                     alert('Por favor, selecione uma modalidade.');
@@ -1461,26 +1381,51 @@
             
             showSpinner('register-spinner');
             
-            // Criar objeto de inscrição
             const inscription = {
                 raceId: selectedRace.id,
                 raceName: selectedRace.name,
                 fullName: fullName,
                 birthDate: birthDate,
                 phone: phone,
-                voucherCode: voucherCode || '',
+                voucherCode: voucherCode,
                 category: category,
                 modality: modality,
                 registrationDate: new Date().toISOString(),
                 status: 'pending'
             };
             
-            // Salvar no Firebase
-            database.ref('inscriptions').push(inscription)
+            // Salvar na estrutura compatível
+            database.ref('cyclingRegistrations').push(inscription)
                 .then(() => {
                     hideSpinner('register-spinner');
                     alert('Inscrição realizada com sucesso!');
                     closeModal('register-modal');
+                    
+                    // Criar mensagem para WhatsApp
+                    const formattedDate = formatDate(new Date(selectedRace.date));
+                    let whatsappMsg = `Olá, gostaria de confirmar a Inscrição no Ranking Ubatuba de Ciclismo!\n\n` +
+                                      `*Prova:* ${selectedRace.name}\n` +
+                                      `*Data:* ${formattedDate}\n` +
+                                      `*Nome:* ${fullName}\n` +
+                                      `*Data Nasc.:* ${birthDate}\n` +
+                                      `*Telefone:* ${phone}\n`;
+                    
+                    if (voucherCode) {
+                        whatsappMsg += `*Código de Desconto:* ${voucherCode}\n`;
+                    }
+                    
+                    if (category) {
+                        whatsappMsg += `*Categoria:* ${category}\n`;
+                    }
+                    
+                    if (modality) {
+                        whatsappMsg += `*Modalidade:* ${modality}\n`;
+                    }
+                    
+                    whatsappMsg += `*Valor:* R$${selectedRace.price.toFixed(2)}`;
+                    
+                    // Abrir WhatsApp
+                    window.open(`https://wa.me/5512997689586?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
                 })
                 .catch(error => {
                     hideSpinner('register-spinner');
@@ -1496,7 +1441,7 @@
             showSpinner('inscriptions-spinner');
             
             // Buscar inscrições para esta prova
-            database.ref('inscriptions').orderByChild('raceId').equalTo(race.id).once('value')
+            database.ref('cyclingRegistrations').orderByChild('raceId').equalTo(race.id).once('value')
                 .then(snapshot => {
                     const inscriptions = snapshot.val() || {};
                     const inscriptionsList = document.getElementById('inscriptions-list');
@@ -1504,8 +1449,6 @@
                     
                     Object.keys(inscriptions).forEach(inscriptionId => {
                         const inscription = inscriptions[inscriptionId];
-                        inscription.id = inscriptionId;
-                        
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${inscription.fullName}</td>
@@ -1515,31 +1458,14 @@
                             <td>${inscription.modality || '-'}</td>
                             <td><span class="status-badge status-${inscription.status}">${getStatusText(inscription.status)}</span></td>
                             <td>
-                                <button class="action-btn edit-btn" data-id="${inscriptionId}">Editar</button>
-                                <button class="action-btn delete-btn" data-id="${inscriptionId}">Excluir</button>
+                                <button class="edit-btn" onclick="editInscription('${inscriptionId}')">Editar</button>
+                                <button class="delete-btn" onclick="deleteInscription('${inscriptionId}')">Excluir</button>
                             </td>
                         `;
-                        
                         inscriptionsList.appendChild(row);
                     });
                     
                     hideSpinner('inscriptions-spinner');
-                    
-                    // Adicionar event listeners aos botões
-                    document.querySelectorAll('.edit-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
-                            const inscriptionId = e.target.getAttribute('data-id');
-                            editInscription(inscriptionId);
-                        });
-                    });
-                    
-                    document.querySelectorAll('.delete-btn').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
-                            const inscriptionId = e.target.getAttribute('data-id');
-                            deleteInscription(inscriptionId);
-                        });
-                    });
-                    
                     openModal('inscriptions-modal');
                 })
                 .catch(error => {
@@ -1550,16 +1476,15 @@
         }
 
         function editInscription(inscriptionId) {
-            // Implementar edição de inscrição
-            alert('Funcionalidade de edição em desenvolvimento.');
+            alert('Funcionalidade de edição em desenvolvimento. Inscrição ID: ' + inscriptionId);
         }
 
         function deleteInscription(inscriptionId) {
             if (confirm('Tem certeza que deseja excluir esta inscrição?')) {
-                database.ref('inscriptions/' + inscriptionId).remove()
+                database.ref('cyclingRegistrations/' + inscriptionId).remove()
                     .then(() => {
                         alert('Inscrição excluída com sucesso.');
-                        viewInscriptions(selectedRace); // Recarregar a lista
+                        viewInscriptions(selectedRace);
                     })
                     .catch(error => {
                         console.error('Erro ao excluir inscrição:', error);
@@ -1577,12 +1502,10 @@
             document.getElementById('race-description').value = race.description || '';
             document.getElementById('race-image-url').value = race.imageUrl || '';
             document.getElementById('regulation-link').value = race.regulationLink || '';
-            
-            // Configurar opções
             document.getElementById('use-categories').checked = race.useCategories || false;
-            document.getElementById('categories-list').style.display = race.useCategories ? 'flex' : 'none';
-            
             document.getElementById('use-modalities').checked = race.useModalities || false;
+            
+            document.getElementById('categories-list').style.display = race.useCategories ? 'flex' : 'none';
             document.getElementById('modalities-list').style.display = race.useModalities ? 'flex' : 'none';
             
             openModal('race-modal');
@@ -1591,21 +1514,15 @@
         function saveRace() {
             const name = document.getElementById('race-name').value.trim();
             const date = document.getElementById('race-date').value;
-            const price = document.getElementById('race-price').value;
+            const price = parseFloat(document.getElementById('race-price').value);
             const description = document.getElementById('race-description').value.trim();
             const imageUrl = document.getElementById('race-image-url').value.trim();
             const regulationLink = document.getElementById('regulation-link').value.trim();
             const useCategories = document.getElementById('use-categories').checked;
             const useModalities = document.getElementById('use-modalities').checked;
             
-            // Validações
-            if (!name || !date || !price) {
+            if (!name || !date || isNaN(price)) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-            
-            if (isNaN(parseFloat(price)) || parseFloat(price) < 0) {
-                alert('Por favor, insira um valor válido para o preço.');
                 return;
             }
             
@@ -1614,21 +1531,20 @@
             const raceData = {
                 name: name,
                 date: date,
-                price: parseFloat(price),
-                description: description || '',
-                imageUrl: imageUrl || '',
-                regulationLink: regulationLink || '',
+                price: price,
+                description: description,
+                imageUrl: imageUrl,
+                regulationLink: regulationLink,
                 useCategories: useCategories,
-                useModalities: useModalities
+                useModalities: useModalities,
+                registrationOpen: true
             };
             
             let promise;
             
             if (editingRace) {
-                // Atualizar prova existente
                 promise = database.ref('races/' + editingRace.id).update(raceData);
             } else {
-                // Criar nova prova
                 promise = database.ref('races').push(raceData);
             }
             
@@ -1637,11 +1553,6 @@
                 alert(`Prova ${editingRace ? 'atualizada' : 'criada'} com sucesso!`);
                 closeModal('race-modal');
                 loadRaces();
-                
-                // Recarregar também as provas finalizadas se estiverem visíveis
-                if (document.getElementById('finished-races').classList.contains('active')) {
-                    loadFinishedRaces();
-                }
             })
             .catch(error => {
                 hideSpinner('race-spinner');
@@ -1651,27 +1562,11 @@
         }
 
         function deleteRace(raceId) {
-            if (confirm('Tem certeza que deseja excluir esta prova? Todas as inscrições associadas também serão excluídas.')) {
-                // Primeiro, excluir todas as inscrições desta prova
-                database.ref('inscriptions').orderByChild('raceId').equalTo(raceId).once('value')
-                    .then(snapshot => {
-                        const inscriptions = snapshot.val() || {};
-                        const deletePromises = [];
-                        
-                        Object.keys(inscriptions).forEach(inscriptionId => {
-                            deletePromises.push(database.ref('inscriptions/' + inscriptionId).remove());
-                        });
-                        
-                        return Promise.all(deletePromises);
-                    })
-                    .then(() => {
-                        // Agora excluir a prova
-                        return database.ref('races/' + raceId).remove();
-                    })
+            if (confirm('Tem certeza que deseja excluir esta prova?')) {
+                database.ref('races/' + raceId).remove()
                     .then(() => {
                         alert('Prova excluída com sucesso.');
                         loadRaces();
-                        loadFinishedRaces();
                     })
                     .catch(error => {
                         console.error('Erro ao excluir prova:', error);
@@ -1705,8 +1600,7 @@
         function logout() {
             auth.signOut()
                 .then(() => {
-                    // Redirecionar para a página inicial ou recarregar
-                    window.location.reload();
+                    console.log('Usuário deslogado com sucesso');
                 })
                 .catch(error => {
                     console.error('Erro no logout:', error);
@@ -1721,43 +1615,46 @@
             document.getElementById(spinnerId).style.display = 'none';
         }
 
-        function formatDate(date) {
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+        function showError(containerId, message) {
+            document.getElementById(containerId).innerHTML = `
+                <div class="empty-state">
+                    <i>⚠️</i>
+                    <h3>${message}</h3>
+                    <p>Tente recarregar a página.</p>
+                </div>
+            `;
         }
 
-        function isValidDate(dateString) {
-            const regex = /^\d{2}-\d{2}-\d{4}$/;
-            if (!regex.test(dateString)) return false;
-            
-            const parts = dateString.split('-');
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10);
-            const year = parseInt(parts[2], 10);
-            
-            if (year < 1900 || year > new Date().getFullYear()) return false;
-            if (month < 1 || month > 12) return false;
-            
-            const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            
-            // Ajustar para anos bissextos
-            if (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) {
-                monthLength[1] = 29;
-            }
-            
-            return day > 0 && day <= monthLength[month - 1];
+        function formatDate(date) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return date.toLocaleDateString('pt-BR', options);
         }
 
         function getStatusText(status) {
             const statusMap = {
                 'pending': 'Pendente',
-                'waiting': 'Lista de Espera',
+                'waiting': 'Aguardando Pagamento', 
                 'completed': 'Confirmada'
             };
             return statusMap[status] || status;
         }
+
+        function clearRaceForm() {
+            document.getElementById('race-name').value = '';
+            document.getElementById('race-date').value = '';
+            document.getElementById('race-price').value = '';
+            document.getElementById('race-description').value = '';
+            document.getElementById('race-image-url').value = '';
+            document.getElementById('regulation-link').value = '';
+            document.getElementById('use-categories').checked = false;
+            document.getElementById('use-modalities').checked = false;
+            document.getElementById('categories-list').style.display = 'none';
+            document.getElementById('modalities-list').style.display = 'none';
+        }
+
+        // Funções globais para os botões da tabela
+        window.editInscription = editInscription;
+        window.deleteInscription = deleteInscription;
     </script>
 </body>
 </html>
