@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Ranking Ubatuba de Ciclismo - R.U.C.</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/fabricioubatuba/ruc2/refs/heads/main/assets/img/favicon.ico">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -377,6 +380,59 @@
         </div>
     </div>
 
+    <!-- Edit Rider Modal -->
+    <div id="edit-rider-modal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <span class="close" title="Fechar">&times;</span>
+            <h2>Editar Inscrição</h2>
+            
+            <div class="form-group">
+                <label for="edit-rider-name">Nome Completo:</label>
+                <input type="text" id="edit-rider-name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-birth-date">Data de Nascimento (DD-MM-AAAA):</label>
+                <input type="text" id="edit-birth-date" placeholder="DD-MM-AAAA" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-phone">Telefone:</label>
+                <input type="tel" id="edit-phone" placeholder="(00) 00000-0000" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-voucher">Código de Desconto/Voucher:</label>
+                <input type="text" id="edit-voucher" placeholder="Digite o código de desconto">
+            </div>
+
+            <div class="form-group">
+                <label for="edit-category">Categoria:</label>
+                <select id="edit-category">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-modality">Modalidade:</label>
+                <select id="edit-modality">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-status">Status:</label>
+                <select id="edit-status" required>
+                    <option value="pending">Contato Pendente</option>
+                    <option value="completed">Pagamento Realizado</option>
+                </select>
+            </div>
+
+            <div class="loading-spinner" id="edit-rider-spinner"></div>
+            <button id="save-rider-btn" class="btn btn-success">Salvar Alterações</button>
+        </div>
+    </div>
+
 <script>
     // ---------- FIREBASE ----------
     const firebaseConfig = {
@@ -424,6 +480,33 @@
     const PATH_RACES = 'EventRaces';
     const PATH_REGISTRATIONS = 'EventRegistrations';
 
+    // ---------- FUNÇÃO PARA CORRIGIR TIMEZONE DA DATA ----------
+    function fixTimezoneDate(dateString) {
+        if (!dateString) return "";
+        
+        // Se já estiver no formato DD-MM-AAAA, retorna como está
+        if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+            return dateString;
+        }
+        
+        // Se estiver no formato AAAA-MM-DD (do input type="date" ou Firebase)
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            const date = new Date(dateString);
+            
+            // Corrigir timezone: adicionar 1 dia para compensar
+            date.setDate(date.getDate() + 1);
+            
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            
+            return `${day}-${month}-${year}`;
+        }
+        
+        // Se for outro formato, retorna como está
+        return dateString;
+    }
+
     // ---------- FIREBASE OPERATIONS ----------
     function saveRaceToFirebase(raceData) {
         return database.ref(`${PATH_RACES}/${raceData.id}`).set(raceData);
@@ -434,6 +517,11 @@
     }
 
     function saveRegistrationToFirebase(registrationData) {
+        // Aplicar correção de timezone na data de nascimento
+        if (registrationData.birthDate) {
+            registrationData.birthDate = fixTimezoneDate(registrationData.birthDate);
+        }
+        
         // Deduplicate: check if a registration with same phone+raceId already exists
         const phoneNorm = (registrationData.phone || '').replace(/\D/g, '');
         return database.ref(PATH_REGISTRATIONS)
@@ -462,6 +550,14 @@
         return database.ref(`${PATH_REGISTRATIONS}/${registrationId}/status`).set(status);
     }
 
+    function updateRegistrationData(registrationId, updatedData) {
+        // Aplicar correção de timezone na data de nascimento se houver
+        if (updatedData.birthDate) {
+            updatedData.birthDate = fixTimezoneDate(updatedData.birthDate);
+        }
+        return database.ref(`${PATH_REGISTRATIONS}/${registrationId}`).update(updatedData);
+    }
+
     function deleteRegistrationFromFirebase(registrationId) {
         return database.ref(`${PATH_REGISTRATIONS}/${registrationId}`).remove();
     }
@@ -484,12 +580,13 @@
             default: return 'status-pending';
         }
     }
+    
     function getStatusText(status) {
         if (!status) return 'Contato Pendente';
         switch(status.toString().trim().toLowerCase()) {
             case 'pending': return 'Contato Pendente';
             case 'waiting': return 'Aguardando Pagamento';
-            case 'completed': return 'Pagamento Concluído';
+            case 'completed': return 'Pagamento Realizado';
             default: return 'Contato Pendente';
         }
     }
@@ -1050,6 +1147,144 @@ console.log('Container selecionado:', container);
             });
     }
 
+    // ---------- EDIT RIDER MODAL ----------
+    function openEditRiderModal(registrationId) {
+        currentRiderId = registrationId;
+        
+        // Mostrar loading
+        const editSpinner = document.getElementById('edit-rider-spinner');
+        if (editSpinner) editSpinner.style.display = 'block';
+        
+        database.ref(`${PATH_REGISTRATIONS}/${registrationId}`).once('value')
+            .then(snapshot => {
+                const rider = snapshot.val();
+                if (!rider) {
+                    alert('Inscrição não encontrada.');
+                    return;
+                }
+                
+                // Buscar dados da prova para carregar categorias/modalidades
+                return database.ref(`${PATH_RACES}/${rider.raceId}`).once('value')
+                    .then(raceSnapshot => {
+                        const race = raceSnapshot.val();
+                        if (editSpinner) editSpinner.style.display = 'none';
+                        
+                        // Preencher os campos
+                        document.getElementById('edit-rider-name').value = rider.name || '';
+                        document.getElementById('edit-birth-date').value = rider.birthDate || '';
+                        document.getElementById('edit-phone').value = rider.phone || '';
+                        document.getElementById('edit-voucher').value = rider.voucherCode || '';
+                        document.getElementById('edit-status').value = rider.status || 'pending';
+                        
+                        // Configurar categorias
+                        const categorySelect = document.getElementById('edit-category');
+                        categorySelect.innerHTML = '<option value="">Selecione</option>';
+                        if (race && race.useCategories && race.categories) {
+                            race.categories.forEach(cat => {
+                                const opt = document.createElement('option');
+                                opt.value = cat;
+                                opt.textContent = cat;
+                                categorySelect.appendChild(opt);
+                            });
+                            categorySelect.value = rider.category || '';
+                            categorySelect.closest('.form-group').style.display = 'block';
+                        } else {
+                            categorySelect.closest('.form-group').style.display = 'none';
+                        }
+                        
+                        // Configurar modalidades
+                        const modalitySelect = document.getElementById('edit-modality');
+                        modalitySelect.innerHTML = '<option value="">Selecione</option>';
+                        if (race && race.useModalities && race.modalities) {
+                            race.modalities.forEach(mod => {
+                                const opt = document.createElement('option');
+                                opt.value = mod;
+                                opt.textContent = mod;
+                                modalitySelect.appendChild(opt);
+                            });
+                            modalitySelect.value = rider.modality || '';
+                            modalitySelect.closest('.form-group').style.display = 'block';
+                        } else {
+                            modalitySelect.closest('.form-group').style.display = 'none';
+                        }
+                        
+                        // Mostrar modal
+                        const editModal = document.getElementById('edit-rider-modal');
+                        if (editModal) editModal.style.display = 'block';
+                    });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados do inscrito:', error);
+                if (editSpinner) editSpinner.style.display = 'none';
+                alert('Erro ao carregar dados do inscrito.');
+            });
+    }
+
+    function saveRiderChanges() {
+        const spinner = document.getElementById('edit-rider-spinner');
+        const saveBtn = document.getElementById('save-rider-btn');
+        
+        if (!currentRiderId) return;
+        
+        // Desabilitar botão e mostrar loading
+        if (saveBtn) saveBtn.disabled = true;
+        if (spinner) spinner.style.display = 'block';
+        
+        // Coletar dados
+        const updatedData = {
+            name: document.getElementById('edit-rider-name').value.trim(),
+            birthDate: document.getElementById('edit-birth-date').value.trim(),
+            phone: document.getElementById('edit-phone').value.trim(),
+            voucherCode: document.getElementById('edit-voucher').value.trim(),
+            status: document.getElementById('edit-status').value,
+            category: document.getElementById('edit-category').value || '',
+            modality: document.getElementById('edit-modality').value || ''
+        };
+        
+        // Validação básica
+        if (!updatedData.name || !updatedData.birthDate || !updatedData.phone) {
+            alert('Preencha os campos obrigatórios: Nome, Data de Nascimento e Telefone.');
+            if (saveBtn) saveBtn.disabled = false;
+            if (spinner) spinner.style.display = 'none';
+            return;
+        }
+        
+        // Salvar no Firebase
+        updateRegistrationData(currentRiderId, updatedData)
+            .then(() => {
+                alert('Dados atualizados com sucesso!');
+                
+                // Fechar modal
+                const editModal = document.getElementById('edit-rider-modal');
+                if (editModal) editModal.style.display = 'none';
+                
+                // Recarregar start list se estiver aberto
+                const startlistModal = document.getElementById('startlist-modal');
+                if (startlistModal && startlistModal.style.display === 'block') {
+                    database.ref(`${PATH_RACES}`).once('value')
+                        .then(snapshot => {
+                            const races = snapshot.val() || {};
+                            // Encontrar a prova atual para recarregar
+                            database.ref(`${PATH_REGISTRATIONS}/${currentRiderId}/raceId`).once('value')
+                                .then(raceIdSnapshot => {
+                                    const raceId = raceIdSnapshot.val();
+                                    if (raceId && races[raceId]) {
+                                        loadStartListData(raceId, races[raceId]);
+                                    }
+                                });
+                        });
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao atualizar inscrição:', error);
+                alert('Erro ao atualizar inscrição. Tente novamente.');
+            })
+            .finally(() => {
+                if (saveBtn) saveBtn.disabled = false;
+                if (spinner) spinner.style.display = 'none';
+            });
+    }
+
     // ---------- PROVAS CRUD ----------
     function openRaceModal(raceId = null, raceData = null) {
         editingRaceId = raceId;
@@ -1231,44 +1466,6 @@ console.log('Container selecionado:', container);
             });
     }
 
-    // ---------- EDIT RIDER ----------
-    function openEditRiderModal(registrationId) {
-        currentRiderId = registrationId;
-        database.ref(`${PATH_REGISTRATIONS}/${registrationId}`).once('value')
-            .then(snapshot => {
-                const rider = snapshot.val();
-                if (!rider) {
-                    alert('Inscrição não encontrada.');
-                    return;
-                }
-
-                const newStatus = prompt(`Alterar status para ${rider.name}:`, rider.status);
-                if (newStatus && ['pending', 'waiting', 'completed'].includes(newStatus)) {
-                    updateRegistrationStatus(registrationId, newStatus)
-                        .then(() => {
-                            alert('Status atualizado com sucesso!');
-                            const startlistModal = document.getElementById('startlist-modal');
-                            if (startlistModal && startlistModal.style.display === 'block') {
-                                const raceId = rider.raceId;
-                                database.ref(`${PATH_RACES}/${raceId}`).once('value')
-                                    .then(raceSnapshot => {
-                                        const race = raceSnapshot.val();
-                                        if (race) loadStartListData(raceId, race);
-                                    });
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Erro ao atualizar status:', error);
-                            alert('Erro ao atualizar status.');
-                        });
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao carregar dados do inscrito:', error);
-                alert('Erro ao carregar dados do inscrito.');
-            });
-    }
-
     function deleteRider(registrationId = null) {
         if (!registrationId) {
             if (currentRiderId) registrationId = currentRiderId;
@@ -1278,7 +1475,23 @@ console.log('Container selecionado:', container);
         deleteRegistrationFromFirebase(registrationId)
             .then(() => {
                 alert('Inscrição excluída com sucesso!');
-                loadRaces();
+                
+                // Recarregar start list se estiver aberto
+                const startlistModal = document.getElementById('startlist-modal');
+                if (startlistModal && startlistModal.style.display === 'block') {
+                    database.ref(`${PATH_RACES}`).once('value')
+                        .then(snapshot => {
+                            const races = snapshot.val() || {};
+                            // Encontrar a prova atual para recarregar
+                            database.ref(`${PATH_REGISTRATIONS}/${registrationId}/raceId`).once('value')
+                                .then(raceIdSnapshot => {
+                                    const raceId = raceIdSnapshot.val();
+                                    if (raceId && races[raceId]) {
+                                        loadStartListData(raceId, races[raceId]);
+                                    }
+                                });
+                        });
+                }
             })
             .catch(error => {
                 console.error('Erro ao excluir inscrição:', error);
@@ -1360,6 +1573,8 @@ console.log('Container selecionado:', container);
     function initApp() {
         $('#phone').mask('(00) 00000-0000');
         $('#birth-date').mask('00-00-0000');
+        $('#edit-phone').mask('(00) 00000-0000');
+        $('#edit-birth-date').mask('00-00-0000');
 
         populateCategoriesList();
         populateModalitiesList();
@@ -1399,6 +1614,7 @@ console.log('Container selecionado:', container);
         const saveRaceBtn = document.getElementById('save-race-btn');
         const deleteRaceBtn = document.getElementById('delete-race-btn');
         const confirmRegisterBtn = document.getElementById('confirm-register-btn');
+        const saveRiderBtn = document.getElementById('save-rider-btn');
 
         if (loginBtnElement) loginBtnElement.addEventListener('click', openLoginModal);
         if (confirmLoginBtn) confirmLoginBtn.addEventListener('click', loginAdmin);
@@ -1407,6 +1623,7 @@ console.log('Container selecionado:', container);
         if (saveRaceBtn) saveRaceBtn.addEventListener('click', saveRace);
         if (deleteRaceBtn) deleteRaceBtn.addEventListener('click', () => deleteRace());
         if (confirmRegisterBtn) confirmRegisterBtn.addEventListener('click', confirmRegistration);
+        if (saveRiderBtn) saveRiderBtn.addEventListener('click', saveRiderChanges);
 
         // image preview
         const raceImageUrlInput = document.getElementById('race-image-url');
