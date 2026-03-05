@@ -948,114 +948,154 @@ console.log('Container selecionado:', container);
     }
 
     function confirmRegistration() {
-        if (isSubmittingRegistration) return; // prevent double submit
-        isSubmittingRegistration = true;
-        const registerSpinner = document.getElementById('register-spinner');
-        const confirmBtn = document.getElementById('confirm-register-btn');
-        if (confirmBtn) confirmBtn.disabled = true;
-        if (registerSpinner) registerSpinner.style.display = 'block';
+    if (isSubmittingRegistration) return; // prevent double submit
+    isSubmittingRegistration = true;
+    const registerSpinner = document.getElementById('register-spinner');
+    const confirmBtn = document.getElementById('confirm-register-btn');
+    if (confirmBtn) confirmBtn.disabled = true;
+    if (registerSpinner) registerSpinner.style.display = 'block';
 
-        const fullName = document.getElementById('full-name');
-        const birthDate = document.getElementById('birth-date');
-        const phone = document.getElementById('phone');
-        const voucherCode = document.getElementById('voucher-code');
-        const category = document.getElementById('category');
-        const modality = document.getElementById('modality');
-        const raceSelectedName = document.getElementById('race-selected-name');
+    const fullName = document.getElementById('full-name');
+    const birthDate = document.getElementById('birth-date');
+    const phone = document.getElementById('phone');
+    const voucherCode = document.getElementById('voucher-code');
+    const category = document.getElementById('category');
+    const modality = document.getElementById('modality');
+    const raceSelectedName = document.getElementById('race-selected-name');
 
-        if (!fullName || !birthDate || !phone || !raceSelectedName) {
-            alert('Erro no formulário.');
+    if (!fullName || !birthDate || !phone || !raceSelectedName) {
+        alert('Erro no formulário.');
+        finalizeRegistrationSubmit();
+        return;
+    }
+
+    // VALIDAÇÃO DO NOME COMPLETO
+    let name = fullName.value.trim();
+    
+    // Verificar se tem pelo menos 2 palavras (nome e sobrenome)
+    const nameParts = name.split(' ').filter(part => part.length > 0);
+    if (nameParts.length < 2) {
+        alert('Por favor, insira seu nome completo (nome e sobrenome).');
+        finalizeRegistrationSubmit();
+        return;
+    }
+    
+    // Verificar se cada parte tem pelo menos 2 caracteres (evitar iniciais apenas)
+    for (let part of nameParts) {
+        if (part.length < 2) {
+            alert('Cada parte do nome deve ter pelo menos 2 caracteres. Evite usar apenas iniciais.');
             finalizeRegistrationSubmit();
             return;
         }
-
-        const name = fullName.value.trim();
-        const birthDateValue = birthDate.value;
-        const phoneValue = phone.value.trim();
-        const voucherCodeValue = voucherCode ? voucherCode.value.trim() : '';
-        const categoryValue = category ? category.value : '';
-        const modalityValue = modality ? modality.value : '';
-
-        if (!name) { alert('Por favor, informe seu nome completo.'); finalizeRegistrationSubmit(); return; }
-        if (!birthDateValue || !/^\d{2}-\d{2}-\d{4}$/.test(birthDateValue)) { alert('Por favor, informe uma data de nascimento válida no formato DD-MM-AAAA.'); finalizeRegistrationSubmit(); return; }
-        const phoneDigits = phoneValue.replace(/\D/g, '');
-        if (phoneDigits.length < 10) { alert('Por favor, insira um telefone válido com DDD.'); finalizeRegistrationSubmit(); return; }
-
-        // Buscar dados completos da prova
-        database.ref(`${PATH_RACES}/${currentRaceId}`).once('value')
-            .then(snapshot => {
-                const race = snapshot.val();
-                if (!race) {
-                    alert('Prova não encontrada.');
-                    throw new Error('race_not_found');
-                }
-
-                // Salvar inscrição no Firebase (com checagem de duplicidade)
-                const registrationData = {
-                    raceId: currentRaceId,
-                    raceName: race.name,
-                    name: name,
-                    birthDate: birthDateValue,
-                    phone: phoneValue,
-                    voucherCode: voucherCodeValue,
-                    category: categoryValue,
-                    modality: modalityValue,
-                    status: 'pending',
-                    timestamp: Date.now()
-                };
-
-                return saveRegistrationToFirebase(registrationData)
-                    .then(() => ({ race, registrationData }))
-                    .catch(err => {
-                        if (err && err.message === 'duplicate_registration') {
-                            alert('Inscrição já cadastrada anteriormente para este atleta nesta prova.');
-                            throw err;
-                        }
-                        throw err;
-                    });
-            })
-            .then(({ race, registrationData }) => {
-                let whatsappMsg = `Olá, gostaria de confirmar a Inscrição no Ranking Ubatuba de Ciclismo!\n\n` +
-                                  `*Prova:* ${raceSelectedName.textContent}\n` +
-                                  `*Nome:* ${registrationData.name}\n` +
-                                  `*Data Nasc.:* ${registrationData.birthDate}\n` +
-                                  `*Telefone:* ${registrationData.phone}\n`;
-
-                if (registrationData.voucherCode) whatsappMsg += `*Código de Desconto:* ${registrationData.voucherCode}\n`;
-                if (registrationData.category) whatsappMsg += `*Categoria:* ${registrationData.category}\n`;
-                if (registrationData.modality) whatsappMsg += `*Modalidade:* ${registrationData.modality}\n`;
-
-                // Buscar preço atual da prova
-                database.ref(`${PATH_RACES}/${currentRaceId}/price`).once('value')
-                    .then(priceSnapshot => {
-                        const price = priceSnapshot.val() || 0;
-                        whatsappMsg += `*Valor:* R$${Number(price).toFixed(2)}`;
-
-                        window.open(`https://wa.me/5512997689586?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-
-                        const registerModal = document.getElementById('register-modal');
-                        if (registerModal) registerModal.style.display = 'none';
-                        alert('Inscrição enviada! Confirme o pagamento via WhatsApp.');
-                    })
-                    .catch(err => {
-                        console.error('Erro ao buscar preço:', err);
-                        alert('Inscrição salva, mas houve erro ao buscar o preço.');
-                    })
-                    .finally(() => {
-                        finalizeRegistrationSubmit();
-                        loadRaces();
-                    });
-            })
-            .catch(error => {
-                console.error('Erro ao salvar inscrição:', error);
-                if (error && error.message === 'duplicate_registration') {
-                    // mensagem já mostrada
-                } else {
-                    alert('Erro ao processar inscrição. Tente novamente.');
-                }
-                finalizeRegistrationSubmit();
-            });
     }
+    
+    // Converter para maiúsculas
+    name = name.toUpperCase();
+    
+    const birthDateValue = birthDate.value;
+    const phoneValue = phone.value.trim();
+    const voucherCodeValue = voucherCode ? voucherCode.value.trim() : '';
+    const categoryValue = category ? category.value : '';
+    const modalityValue = modality ? modality.value : '';
+
+    // VALIDAÇÃO DA DATA DE NASCIMENTO
+    if (!birthDateValue || !/^\d{2}-\d{2}-\d{4}$/.test(birthDateValue)) { 
+        alert('Por favor, informe uma data de nascimento válida no formato DD-MM-AAAA.'); 
+        finalizeRegistrationSubmit(); 
+        return; 
+    }
+    
+    // Verificar se a data tem todos os dígitos preenchidos
+    const birthDigits = birthDateValue.replace(/\D/g, '');
+    if (birthDigits.length !== 8) {
+        alert('A data de nascimento deve ter 8 dígitos numéricos (DDMMAAAA).');
+        finalizeRegistrationSubmit();
+        return;
+    }
+
+    // VALIDAÇÃO DO TELEFONE
+    const phoneDigits = phoneValue.replace(/\D/g, '');
+    if (phoneDigits.length !== 11) { 
+        alert('Por favor, insira um telefone celular válido com DDD (11 dígitos numéricos).'); 
+        finalizeRegistrationSubmit(); 
+        return; 
+    }
+
+    // Buscar dados completos da prova
+    database.ref(`${PATH_RACES}/${currentRaceId}`).once('value')
+        .then(snapshot => {
+            const race = snapshot.val();
+            if (!race) {
+                alert('Prova não encontrada.');
+                throw new Error('race_not_found');
+            }
+
+            // Salvar inscrição no Firebase (com checagem de duplicidade)
+            const registrationData = {
+                raceId: currentRaceId,
+                raceName: race.name,
+                name: name, // Agora já está em maiúsculas
+                birthDate: birthDateValue,
+                phone: phoneValue,
+                voucherCode: voucherCodeValue,
+                category: categoryValue,
+                modality: modalityValue,
+                status: 'pending',
+                timestamp: Date.now()
+            };
+
+            return saveRegistrationToFirebase(registrationData)
+                .then(() => ({ race, registrationData }))
+                .catch(err => {
+                    if (err && err.message === 'duplicate_registration') {
+                        alert('Inscrição já cadastrada anteriormente para este atleta nesta prova.');
+                        throw err;
+                    }
+                    throw err;
+                });
+        })
+        .then(({ race, registrationData }) => {
+            let whatsappMsg = `Olá, gostaria de confirmar a Inscrição no Ranking Ubatuba de Ciclismo!\n\n` +
+                              `*Prova:* ${raceSelectedName.textContent}\n` +
+                              `*Nome:* ${registrationData.name}\n` +
+                              `*Data Nasc.:* ${registrationData.birthDate}\n` +
+                              `*Telefone:* ${registrationData.phone}\n`;
+
+            if (registrationData.voucherCode) whatsappMsg += `*Código de Desconto:* ${registrationData.voucherCode}\n`;
+            if (registrationData.category) whatsappMsg += `*Categoria:* ${registrationData.category}\n`;
+            if (registrationData.modality) whatsappMsg += `*Modalidade:* ${registrationData.modality}\n`;
+
+            // Buscar preço atual da prova
+            database.ref(`${PATH_RACES}/${currentRaceId}/price`).once('value')
+                .then(priceSnapshot => {
+                    const price = priceSnapshot.val() || 0;
+                    whatsappMsg += `*Valor:* R$${Number(price).toFixed(2)}`;
+
+                    window.open(`https://wa.me/5512997689586?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+
+                    const registerModal = document.getElementById('register-modal');
+                    if (registerModal) registerModal.style.display = 'none';
+                    alert('Inscrição enviada! Confirme o pagamento via WhatsApp.');
+                })
+                .catch(err => {
+                    console.error('Erro ao buscar preço:', err);
+                    alert('Inscrição salva, mas houve erro ao buscar o preço.');
+                })
+                .finally(() => {
+                    finalizeRegistrationSubmit();
+                    loadRaces();
+                });
+        })
+        .catch(error => {
+            console.error('Erro ao salvar inscrição:', error);
+            if (error && error.message === 'duplicate_registration') {
+                // mensagem já mostrada
+            } else {
+                alert('Erro ao processar inscrição. Tente novamente.');
+            }
+            finalizeRegistrationSubmit();
+        });
+}
 
     function finalizeRegistrationSubmit() {
         isSubmittingRegistration = false;
@@ -1561,12 +1601,87 @@ console.log('Container selecionado:', container);
         if (regulationModal) regulationModal.style.display = 'block';
     }
 
-    // ---------- Initialization ----------
+    // Validação em tempo real
+function setupRealTimeValidation() {
+    // Validar nome em tempo real
+    const nameInput = document.getElementById('full-name');
+    if (nameInput) {
+        nameInput.addEventListener('input', function() {
+            const nameError = document.getElementById('full-name-error');
+            const name = this.value.trim();
+            const nameParts = name.split(' ').filter(part => part.length > 0);
+            
+            if (name.length > 0) {
+                if (nameParts.length < 2) {
+                    nameError.textContent = 'Digite seu nome completo (nome e sobrenome).';
+                    nameError.style.display = 'block';
+                } else {
+                    // Verificar se alguma parte tem menos de 2 caracteres
+                    let hasInvalidPart = false;
+                    for (let part of nameParts) {
+                        if (part.length < 2) {
+                            hasInvalidPart = true;
+                            break;
+                        }
+                    }
+                    
+                    if (hasInvalidPart) {
+                        nameError.textContent = 'Cada parte do nome deve ter pelo menos 2 caracteres.';
+                        nameError.style.display = 'block';
+                    } else {
+                        nameError.style.display = 'none';
+                    }
+                }
+            } else {
+                nameError.style.display = 'none';
+            }
+        });
+        
+        // Converter para maiúsculas ao sair do campo
+        nameInput.addEventListener('blur', function() {
+            this.value = this.value.toUpperCase();
+        });
+    }
+    
+    // Validar data de nascimento em tempo real
+    const birthInput = document.getElementById('birth-date');
+    if (birthInput) {
+        birthInput.addEventListener('input', function() {
+            const birthError = document.getElementById('birth-date-error');
+            const digits = this.value.replace(/\D/g, '');
+            if (digits.length !== 8 && digits.length > 0) {
+                birthError.textContent = 'A data deve ter 8 dígitos numéricos (DDMMAAAA).';
+                birthError.style.display = 'block';
+            } else {
+                birthError.style.display = 'none';
+            }
+        });
+    }
+    
+    // Validar telefone em tempo real
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+            const phoneError = document.getElementById('phone-error');
+            const digits = this.value.replace(/\D/g, '');
+            if (digits.length !== 11 && digits.length > 0) {
+                phoneError.textContent = 'O telefone deve ter 11 dígitos numéricos (incluindo DDD).';
+                phoneError.style.display = 'block';
+            } else {
+                phoneError.style.display = 'none';
+            }
+        });
+    }
+}
+
+// ---------- Initialization ----------
     function initApp() {
         $('#phone').mask('(00) 00000-0000');
         $('#birth-date').mask('00-00-0000');
         $('#edit-phone').mask('(00) 00000-0000');
         $('#edit-birth-date').mask('00-00-0000');
+
+setupRealTimeValidation();
 
         populateCategoriesList();
         populateModalitiesList();
